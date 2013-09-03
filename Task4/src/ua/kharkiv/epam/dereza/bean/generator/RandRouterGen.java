@@ -6,7 +6,14 @@ import java.util.Random;
 import ua.kharkiv.epam.dereza.bean.NetworkEquipment;
 import ua.kharkiv.epam.dereza.bean.Router;
 
-public class RandomRouterGenerator extends EquipmentGenerator{
+/**
+ * Full name of the class is random router generator.
+ * It is chain of responsibility pattern implementation.
+ * 
+ * @author Eduard_Dereza
+ *
+ */
+public class RandRouterGen extends EquipmentGenerator{
 	
 	private final static String DEVICE_NAME = "Router";
 	

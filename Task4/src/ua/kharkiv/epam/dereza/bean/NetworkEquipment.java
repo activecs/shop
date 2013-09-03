@@ -2,6 +2,8 @@ package ua.kharkiv.epam.dereza.bean;
 
 import java.math.BigDecimal;
 
+import ua.kharkiv.epam.dereza.bean.generator.FieldNameMapping;
+
 /**
  *  * 
  * @author Eduard_Dereza
@@ -26,25 +28,46 @@ public abstract class NetworkEquipment implements Comparable<NetworkEquipment> {
 		this.price = price;
 	}
 	
+	@FieldNameMapping(fieldName="model")
 	public String getModel() {
 		return model;
 	}
+	
+	@FieldNameMapping(fieldName="model")
 	public void setModel(String model) {
 		this.model = model;
 	}
+	
+	@FieldNameMapping(fieldName="weight")
 	public double getWeight() {
 		return weight;
 	}
+	
+	@FieldNameMapping(fieldName="weight")
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+	
+	@FieldNameMapping(fieldName="port.count")
 	public int getPortCount() {
 		return portCount;
 	}
+	
+	@FieldNameMapping(fieldName="port.count")
 	public void setPortCount(int portCount) {
 		this.portCount = portCount;
 	}
-
+	
+	@FieldNameMapping(fieldName="price")
+	public BigDecimal getPrice() {
+		return price;
+	}
+	
+	@FieldNameMapping(fieldName="price")
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) return true;
@@ -52,14 +75,6 @@ public abstract class NetworkEquipment implements Comparable<NetworkEquipment> {
 			return false;
 		NetworkEquipment equipment = (NetworkEquipment) obj;
 		return model.equals(equipment.model);
-	}
-	
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
 	}
 	
 	@Override

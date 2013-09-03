@@ -2,6 +2,8 @@ package ua.kharkiv.epam.dereza.bean;
 
 import java.math.BigDecimal;
 
+import ua.kharkiv.epam.dereza.bean.generator.FieldNameMapping;
+
 /**
  * 
  * @author Eduard_Dereza
@@ -21,19 +23,23 @@ public class Router extends NetworkEquipment {
 		this.protocolType = protocolType;
 		this.operationSystem = operationSystem;
 	}
-
+	
+	@FieldNameMapping(fieldName="protocol.type")
 	public String getProtocolType() {
 		return protocolType;
 	}
-
+	
+	@FieldNameMapping(fieldName="protocol.type")
 	public void setProtocolType(String protocolType) {
 		this.protocolType = protocolType;
 	}
-
+	
+	@FieldNameMapping(fieldName="operation.system")
 	public String getOperationSystem() {
 		return operationSystem;
 	}
-
+	
+	@FieldNameMapping(fieldName="operation.system")
 	public void setOperationSystem(String operationSystem) {
 		this.operationSystem = operationSystem;
 	}

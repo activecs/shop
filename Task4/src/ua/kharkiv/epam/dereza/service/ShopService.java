@@ -1,7 +1,6 @@
 package ua.kharkiv.epam.dereza.service;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -66,7 +65,7 @@ public class ShopService {
 	public void setAdRec(AdReccomendation adRec) {
 		this.adRec = adRec;
 	}
-
+	
 	/**
 	 * Checks ability to move good from Goods to basket
 	 * 
@@ -74,7 +73,7 @@ public class ShopService {
 	 * @param desiredCount
 	 * @return true if Goods contain necessary count of chosen good
 	 */
-	private boolean checkAbilityToAddDesiredCountOfGoods(NetworkEquipment element, int desiredCount) {
+	private boolean canAddToBasket(NetworkEquipment element, int desiredCount) {
 		int avaliableCount = goods.getAvaliableCountOfGood(element);
 		if (avaliableCount < desiredCount || desiredCount < 1) {
 			return false;
@@ -89,7 +88,7 @@ public class ShopService {
 	 * @param count
 	 */
 	public void putGoodToBasket(NetworkEquipment element, int count) {
-		if (!checkAbilityToAddDesiredCountOfGoods(element, count))
+		if (!canAddToBasket(element, count))
 			throw new IllegalArgumentException(
 					"Unfotunatelly something went wrong");
 		

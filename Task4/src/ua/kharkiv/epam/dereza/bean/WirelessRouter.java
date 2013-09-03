@@ -2,6 +2,8 @@ package ua.kharkiv.epam.dereza.bean;
 
 import java.math.BigDecimal;
 
+import ua.kharkiv.epam.dereza.bean.generator.FieldNameMapping;
+
 /**
  * 
  * @author Eduard_Dereza
@@ -21,10 +23,12 @@ public class WirelessRouter extends Router{
 		this.dualBand = dualBand;
 	}
 	
+	@FieldNameMapping(fieldName="dual.band")
 	public boolean isDualBand() {
 		return dualBand;
 	}
-
+	
+	@FieldNameMapping(fieldName="dual.band")
 	public void setDualBand(boolean dualBand) {
 		this.dualBand = dualBand;
 	}

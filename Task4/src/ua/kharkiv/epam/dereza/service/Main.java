@@ -1,20 +1,27 @@
 package ua.kharkiv.epam.dereza.service;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import ua.kharkiv.epam.dereza.bean.NetworkEquipment;
 import ua.kharkiv.epam.dereza.bean.Router;
 import ua.kharkiv.epam.dereza.bean.WirelessRouter;
 import ua.kharkiv.epam.dereza.bean.generator.EquipmentGenerator;
-import ua.kharkiv.epam.dereza.bean.generator.ManualRouterGenerator;
-import ua.kharkiv.epam.dereza.bean.generator.ManualWirelessRouterGenerator;
-import ua.kharkiv.epam.dereza.bean.generator.RandomRouterGenerator;
-import ua.kharkiv.epam.dereza.bean.generator.RandomWirelessRouterGenerator;
+import ua.kharkiv.epam.dereza.bean.generator.ReflectionManualGenerator;
+import ua.kharkiv.epam.dereza.bean.generator.ManualRouterGen;
+import ua.kharkiv.epam.dereza.bean.generator.ManualWirelessRouterGen;
+import ua.kharkiv.epam.dereza.bean.generator.ReflectionRandomGenerator;
+import ua.kharkiv.epam.dereza.bean.generator.RandRouterGen;
+import ua.kharkiv.epam.dereza.bean.generator.RandWirelessRouterGen;
 import ua.kharkiv.epam.dereza.dao.Basket;
 import ua.kharkiv.epam.dereza.dao.Goods;
 import ua.kharkiv.epam.dereza.dao.Orders;
@@ -27,18 +34,32 @@ import ua.kharkiv.epam.dereza.util.Utility;
  *
  */
 public class Main {
-
+	 
+	public static final String basename = "messages";
+	
+	public static Locale[] getAvaliableLocales(){
+		return new Locale[]{new Locale("en","US"), new Locale("ru","RU")};
+	}
+	
 	public static void main(String[] args) {
+		Map<String, Class> classes = new HashMap<String, Class>();
+		classes.put("Router", ua.kharkiv.epam.dereza.bean.Router.class);
+		classes.put("WirelessRouter", ua.kharkiv.epam.dereza.bean.WirelessRouter.class);
+		
+		Currency currency = Currency.getInstance("UAH");
 		EquipmentGenerator generator = null;
-		ShopService service = new ShopService(new Basket(), new Goods(), new Orders(), new AdReccomendation());
+		ShopService service = new ShopService(new Basket(), new Goods(),
+				new Orders(), new AdReccomendation());
 		
 		init(service.getGoods());
 		
 		// Console menu
-		Scanner scanner = null;
+		Scanner scanner = new Scanner(System.in);
+		Locale locale = chooseLocale(scanner);
 		boolean flag = true;
 		while (flag) {
 			scanner = new Scanner(System.in);
+			
 			printMenu();
 			
 			System.out.println("Selection: ");
@@ -61,7 +82,7 @@ public class Main {
 			}
 
 			case 4: {
-				checkout(service);
+				checkout(service, currency, locale);
 				break;
 			}
 
@@ -81,22 +102,31 @@ public class Main {
 			}
 			
 			case 8: {
-				if (generator == null){
-					System.out.println("Which approach would you like to choose:");
-					System.out.println("1 - Random");
-					System.out.println("2 - Manual");
+				while (generator == null){
+					ResourceBundle bundle = ResourceBundle.getBundle(basename, locale);
+					System.out.println(bundle.getString("which.approach.would.you.like.to.choose"));
+					System.out.println("1 - " + bundle.getString("random"));
+					System.out.println("2 - " + bundle.getString("manual"));
+					System.out.println("3 - " + bundle.getString("random.with.reflection"));
+					System.out.println("4 - " + bundle.getString("manual.with.reflection"));
 					
 					int generatorType = scanner.nextInt();
 					if(generatorType == 1){
-						generator = new RandomRouterGenerator();
-						generator.setNext(new RandomWirelessRouterGenerator());
+						generator = new RandRouterGen();
+						generator.setNext(new RandWirelessRouterGen());
 					}
 					if(generatorType == 2){
-						generator = new ManualRouterGenerator();
-						generator.setNext(new ManualWirelessRouterGenerator());
+						generator = new ManualRouterGen(locale);
+						generator.setNext(new ManualWirelessRouterGen(locale));
+					}
+					if(generatorType == 3){
+						generator = new ReflectionRandomGenerator(classes);
+					}
+					if(generatorType == 4){
+						generator = new ReflectionManualGenerator(classes, locale);
 					}
 				}
-				addNewGood(service, scanner, generator);
+				addNewGood(service, scanner, generator, locale);
 				break;
 			}
 			
@@ -126,6 +156,17 @@ public class Main {
 		goods.addGood(new WirelessRouter("wr651", 1.7, 12, new BigDecimal(1262), "a/b/n", "noOS", true), 7);
 		goods.addGood(new WirelessRouter("wr652", 2.4, 8, new BigDecimal(1391), "a/b/n", "noOS", true));
 		goods.addGood(new WirelessRouter("wr621", 3.7, 16, new BigDecimal(999), "a/b/n", "noOS", false), 3);
+	}
+	
+	public static Locale chooseLocale(Scanner scanner){
+			System.out.println("Please choose locale :");
+			Locale[] locales = getAvaliableLocales();
+			for(int i=0; i<locales.length; i++){
+				System.out.println( i + " " + locales[i]);
+			}
+			int chosenLocale = scanner.nextInt();
+			
+			return locales[chosenLocale];
 	}
 	
 	public static void printMenu(){
@@ -180,8 +221,12 @@ public class Main {
 		}
 	}
 	
-	public static void checkout(ShopService service){
-		System.out.println("\n Your bill - " + service.checkOut() + " UAH");
+	public static void checkout(ShopService service, Currency currency, Locale locale){
+		ResourceBundle bundle = ResourceBundle.getBundle(basename, locale);
+		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+		nf.setCurrency(currency);
+		String bill = nf.format(service.checkOut().doubleValue());
+		System.out.println("\n" + bundle.getString("your.bill") + " " + bill);
 	}
 	
 	public static void showLastAddedFiveGoods(ShopService service){
@@ -231,15 +276,23 @@ public class Main {
 		} 
 	}
 	
-	public static void addNewGood(ShopService service, Scanner scanner, EquipmentGenerator generator){
-		System.out.println("Which product would you like to create:");
-		System.out.println("Router or WirelessRouter, please type in type of device");
+	public static void addNewGood(ShopService service, Scanner scanner,
+			EquipmentGenerator generator, Locale locale) {
+		ResourceBundle bundle = ResourceBundle.getBundle(basename, locale);
+		System.out.println(bundle.getString("which.product.would.you.like.to.create"));
+		System.out.println(bundle.getString("router.or.wirelessrouter") + ", "
+				+ bundle.getString("please.type.in.type.of.device"));
 			
 		String product = scanner.next();
-		NetworkEquipment newEquip = generator.generate(product);		
+		NetworkEquipment newEquip = null;
+		try{
+			newEquip = generator.generate(product);		
+		}catch(Exception ex){
+			System.out.println(bundle.getString("cannot.generate.good"));
+		}
 		if(newEquip != null){
 			service.getGoods().addGood(newEquip);
-			System.out.println("New good was added.");
+			System.out.println(bundle.getString("new.good.was.added"));
 		}
 	}
 }
