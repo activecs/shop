@@ -3,164 +3,217 @@ package ua.kharkiv.epam.dereza.current;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Sequence finder with wait/notify
+ * Sequence finder with ReentrantLock
  * 
  * @author Eduard_Dereza
- *
+ * 
  */
 public class SequenceFinder {
+	// keeps path to file for searching
+	private StringBuffer path = new StringBuffer();
+	// keeps messages from daemon to main thread
+	private StringBuffer messages = new StringBuffer();
+	// minimal allowable length of sequence
 
-	private StringBuilder path = new StringBuilder();
-	private int minSeqLngth = 2;
+	private volatile boolean searchDone = true;
+	private Lock lock = new ReentrantLock();
+	private Condition newTask = lock.newCondition();
+	private Condition newMessage = lock.newCondition();
 
-	public static void main(String[] args) throws IOException,	InterruptedException {
+	public static void main(String[] args) throws Exception {
 		// initialize thread and starts it
 		SequenceFinder finder = new SequenceFinder();
-		SequenceFinder.SequenceSearch search = finder.new SequenceSearch();
-		Thread searchThread = new Thread(search);
+		Thread searchThread = new Thread(finder.new SequenceSearch());
 		searchThread.setDaemon(true);
 		searchThread.start();
 
-		boolean flag = true;
+		// console menu
+		boolean escMenu = true;
 		Scanner scanner = new Scanner(System.in);
-		while (flag) {
+		while (escMenu) {
 			System.out.println("Please input path to file or -1 to exit");
 			System.out.println("(for win it looks like - C:/Windows/.., for linux - /data/app/..)");
 			System.out.print(">");
+
 			String path = scanner.next();
 			if (!new File(path.toString()).exists())
 				throw new IllegalArgumentException();
+
 			if (path.equals("-1"))
-				flag = false;
+				escMenu = false;
 			else {
-				synchronized (finder.path) {
+				try {
+					finder.lock.lock();
+					// sets path
+					finder.path.delete(0, path.length());
 					finder.path.append(path);
-					finder.path.notifyAll();
-					
-					while(!(finder.path.length() == 0))
-						finder.path.wait();
+					finder.searchDone = false;
+					finder.newTask.signalAll();
+					while (!finder.searchDone) {
+						// thread sleeps until daemon doesn't set a message
+						finder.newMessage.await();
+						System.out.print(finder.messages);
+						finder.messages.delete(0, finder.messages.length());
+					}
+				} finally {
+					finder.lock.unlock();
 				}
 			}
 		}
 		scanner.close();
 	}
 
+	/**
+	 * Sequences finder
+	 * 
+	 * @author Eduard_Dereza
+	 * 
+	 */
 	private class SequenceSearch implements Runnable {
-		FileInputStream fis = null;
+
+		private FileInputStream fis;
+		private byte[] readArr;
+		private Integer[] suffixIndexes;
+		private Integer length =-1;
+		private Integer firstOccurrence =-1;
+		private Integer secondOccurrence =-1;
 
 		@Override
 		public void run() {
+			// thread sleeps until searchDone == true
+			// this condition can be changed in menu
 			while (true) {
-				synchronized (path) {
-					try {
-						while (path.length() == 0)
-							path.wait();
-					} catch (InterruptedException e) {
-						throw new RuntimeException(e);
+				try {
+					lock.lock();
+					while (searchDone)
+						newTask.await();
+				} catch (InterruptedException e) {
+					throw new RuntimeException("Thread was interrupted");
+				}finally{
+					lock.unlock();
+				}
+				File file = new File(path.toString());
+				// saves message for main thread
+				sendMessage("File length:" + file.length());
+
+				readFile(file);
+
+				// Start indexes of suffixes
+				suffixIndexes = new Integer[readArr.length];
+
+				// Unsorted array of suffixes
+				sendMessage("\nInitialization...");
+				for (int i = 0; i < suffixIndexes.length; i++)
+					suffixIndexes[i] = i;
+
+				// sorts indexes
+				sendMessage("\nSorts indexes....");
+				sortSuffixArrays();
+				sendMessage("\nSorts indexes finished.");
+
+				// Searching
+				sendMessage("\nSequence searching....");
+				for (int i = 0; i < suffixIndexes.length - 1; i++) {
+					Integer same = countSameBytesInSuffixes(i, i + 1);
+
+					if(i % 75000 == 0)
+						sendMessage("Processed " + i + " from " + suffixIndexes.length + " indexes\n");
+
+					if (same > length) {
+						length = same;
+						firstOccurrence = suffixIndexes[i];
+						secondOccurrence = suffixIndexes[i + 1];
 					}
-					File file = new File(path.toString());
-					path.delete(0, path.length());
 
-					System.out.println("File length:" + file.length());
+				}
 
-					// container for all sequences
-					List<List<Byte>> sequences = new ArrayList<List<Byte>>();
-					List<Byte> tempSequence = new ArrayList<Byte>();
+				sendMessage("\nThe longest repeated sequence has " + length + " elements.");
+				sendMessage(" indexes:" + firstOccurrence + ", " + secondOccurrence + "\n");
+				searchDone = true;
 
-					try {
-						fis = new FileInputStream(file);
-						byte[] read = new byte[10];
-						while (fis.read(read) != -1) {
-							for (Byte currentByte : read) {
-								// it is first element of sequence
-								if (tempSequence.isEmpty())
-									tempSequence.add(currentByte);
-								// next element for sequence
-								if (currentByte > tempSequence.get(tempSequence.size() - 1))
-									tempSequence.add(currentByte);
-								// saves sequence if it has length greater or
-								// equal
-								// minimal sequence length
-								if (currentByte < tempSequence.get(tempSequence.size() - 1)) {
-									if (tempSequence.size() >= minSeqLngth)
-										sequences.add(tempSequence);
-									// prepares containre for next sequence
-									tempSequence = new ArrayList<Byte>();
-								}
-							}
-						}
-						fis.close();
-					} catch (IOException ex) {
-						throw new RuntimeException(ex);
-					}
-
-					// sorts sequences by length
-					Collections.sort(sequences, new Comparator<List<Byte>>() {
-						@Override
-						public int compare(List<Byte> list1, List<Byte> list2) {
-							if (list1.size() > list2.size())
-								return 1;
-							if (list1.size() < list2.size())
-								return -1;
-							return 0;
-						}
-					});
-					
-					// looking for the greatest repeated sequence
-					List<Byte> greatestSeq = new ArrayList<Byte>();
-					for (int i = 0; i < sequences.size(); i++) {
-						for(int j = (i + 1); j < sequences.size(); j++){
-							if(containEntry(sequences.get(j), sequences.get(i))){
-								if (greatestSeq.size() < sequences.get(i).size()) {
-									greatestSeq = sequences.get(i);
-								}
-							}
-						}
-					}
-					
-					// looking for indexes
-					List<Integer> indexes = new ArrayList<Integer>();
-					for (int i = 0; i < sequences.size(); i++) {
-						if(containEntry(sequences.get(i), greatestSeq)){
-							indexes.add(i);
-						}
-					}
-					
-					System.out.println("The greatest repeated sequence:" + greatestSeq);
-					System.out.println("indexes:" + indexes);
-
-					path.notifyAll();
+				try{
+					lock.lock();
+					newMessage.signalAll();
+				}finally{
+					lock.unlock();
 				}
 			}
 		}
-		
+
 		/**
-		 * Checks whether list1 contains list2
+		 * Sorts suffixIndexes according to  read byte array
+		 */
+		private void sortSuffixArrays() {
+			Arrays.sort(suffixIndexes, new Comparator<Integer>() {
+				@Override
+				public int compare(Integer first, Integer second) {
+					int result = Byte.compare(readArr[first], readArr[second]);
+					return result;
+				}
+			});
+		}
+
+		/**
+		 * Allows to found longest repeated sequence.
+		 * Count same bytes in different suffixes.
 		 * 
-		 * @param list1
-		 * @param list2
+		 * @param firstIndex
+		 * @param secondIndex
 		 * @return
 		 */
-		private <T> boolean containEntry(List<T> list1, List<T> list2){
-			StringBuilder list1Str = new StringBuilder();
-			StringBuilder list2Str = new StringBuilder();
-			for(T tmp : list1)
-				list1Str.append("." + tmp);
-			for(T tmp : list2)
-				list2Str.append("." + tmp);
-			Pattern pattern = Pattern.compile(list2Str.toString());
-			Matcher matcher = pattern.matcher(list1Str.toString());
-			
-			return matcher.find();
+		private Integer countSameBytesInSuffixes(int firstIndex, int secondIndex) {
+			Integer totalCount = 0;
+			int iteraion = Math.max(suffixIndexes[firstIndex],	suffixIndexes[secondIndex]);
+			int count1 = suffixIndexes[firstIndex];
+			int count2 = suffixIndexes[secondIndex];
+
+			while (iteraion++ < readArr.length) {
+				if (readArr[count1++] == readArr[count2++])
+					totalCount++;
+				else
+					break;
+			}
+			return totalCount;
+		}
+
+		/**
+		 * Saves message for main thread
+		 * 
+		 * @param message
+		 */
+		private void sendMessage(String message){
+			try{
+				messages.append(message);
+				lock.lock();
+				newMessage.signalAll();
+			}finally{
+				lock.unlock();
+			}
+		}
+
+		/**
+		 * Reads file and saves it in byte array.
+		 * 
+		 * @param file
+		 */
+		private void readFile(File file){
+			try {
+				fis = new FileInputStream(file);
+				readArr = new byte[(int) file.length()];
+				// reads file to array
+				fis.read(readArr);
+				fis.close();
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
+			}
 		}
 	}
 }

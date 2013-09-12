@@ -40,10 +40,11 @@ public class ExecutorPrimeFinder {
 			
 			primeFinderList.add(primeExecutor.new PrimeFinderCallable(start, finish));
 		}
+		// waits while executor finish all tasks
 		List<Future<List<Integer>>> futureList = exService.invokeAll(primeFinderList);
 		//keeps result
 		List<Integer> listOfPrime = new ArrayList<Integer>();
-		// waits while executor finish all tasks
+		
 		for(Future<List<Integer>> tempFuture : futureList){
 			listOfPrime.addAll(tempFuture.get());
 		}
@@ -53,7 +54,7 @@ public class ExecutorPrimeFinder {
 		System.out.println("time:" + (finishTime - startTime));
 		
 		System.out.println("list size:" + listOfPrime.size());
-		
+		//it isn't necessary
 		exService.shutdown();
 	}
 	
