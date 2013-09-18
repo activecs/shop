@@ -21,7 +21,7 @@ public class Goods {
 	public Goods() {
 		goods = new LinkedHashMap<NetworkEquipment, Integer>();
 	}
-	
+
 	/**
 	 * Return list of goods that you can buy in shop
 	 * 
@@ -30,7 +30,7 @@ public class Goods {
 	public List<NetworkEquipment> getListOfAvaliableGoods() {
 		return new ArrayList<NetworkEquipment>(goods.keySet());
 	}
-	
+
 	/**
 	 * Allow you to add good to shop
 	 * 
@@ -39,7 +39,7 @@ public class Goods {
 	public void addGood(NetworkEquipment element) {
 		addGood(element, 1);
 	}
-	
+
 	/**
 	 * Allow you to add good to shop
 	 * 
@@ -54,7 +54,7 @@ public class Goods {
 		}
 		goods.put(element, count);
 	}
-	
+
 	/**
 	 * 
 	 * @param element
@@ -63,7 +63,7 @@ public class Goods {
 	public int getAvaliableCountOfGood(NetworkEquipment element) {
 		return goods.get(element);
 	}
-	
+
 	/**
 	 * Moves good from shop
 	 * 
@@ -72,7 +72,7 @@ public class Goods {
 	public void reduceCountOfGood(NetworkEquipment element) {
 		reduceCountOfGood(element, 1);
 	}
-	
+
 	/**
 	 * Moves good from shop
 	 * 
@@ -87,5 +87,4 @@ public class Goods {
 							+ avaliableCount + ", desiredCount=" + count);
 		goods.put(element, (avaliableCount - count));
 	}
-	
 }

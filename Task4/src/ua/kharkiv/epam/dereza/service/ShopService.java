@@ -2,6 +2,7 @@ package ua.kharkiv.epam.dereza.service;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -9,6 +10,7 @@ import ua.kharkiv.epam.dereza.bean.NetworkEquipment;
 import ua.kharkiv.epam.dereza.dao.Basket;
 import ua.kharkiv.epam.dereza.dao.Goods;
 import ua.kharkiv.epam.dereza.dao.Orders;
+import ua.kharkiv.epam.dereza.socket.RestrictedShopService;
 
 /**
  * Contain links on goods, orders, basket
@@ -17,15 +19,15 @@ import ua.kharkiv.epam.dereza.dao.Orders;
  * @author Eduard_Dereza
  *
  */
-public class ShopService {
-	
+public class ShopService implements RestrictedShopService{
+
 	private Basket basket;
 	private Goods goods;
 	private Orders orders;
 	private AdReccomendation adRec;
 
 	public ShopService() {}
-	
+
 	public ShopService(Basket basket, Goods goods, Orders orders, AdReccomendation adRec) {
 		super();
 		this.basket = basket;
@@ -57,7 +59,7 @@ public class ShopService {
 	public void setOrders(Orders orders) {
 		this.orders = orders;
 	}
-		
+
 	public AdReccomendation getAdRec() {
 		return adRec;
 	}
@@ -65,7 +67,7 @@ public class ShopService {
 	public void setAdRec(AdReccomendation adRec) {
 		this.adRec = adRec;
 	}
-	
+
 	/**
 	 * Checks ability to move good from Goods to basket
 	 * 
@@ -80,7 +82,7 @@ public class ShopService {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Adds good to basket
 	 * 
@@ -90,14 +92,14 @@ public class ShopService {
 	public void putGoodToBasket(NetworkEquipment element, int count) {
 		if (!canAddToBasket(element, count))
 			throw new IllegalArgumentException(
-					"Unfotunatelly something went wrong");
-		
-		basket.putGood(element, count);	
+					"Unfotunatelly cannot put good to basket");
+
+		basket.putGood(element, count);
 		adRec.putGoodToLastAddedGoods(element, count);
-		
+
 		goods.reduceCountOfGood(element, count);
 	}
-	
+
 	/**
 	 * Make order
 	 * 
@@ -119,5 +121,27 @@ public class ShopService {
 		}
 		basket.clear();
 		return bill;
+	}
+
+	@Override
+	public int countGoodInShop(){
+		int totalCount = 0;
+		for(NetworkEquipment good : goods.getListOfAvaliableGoods()){
+			totalCount += goods.getAvaliableCountOfGood(good);
+		}
+		return totalCount;
+	}
+
+	@Override
+	public NetworkEquipment foundGoodByModel(String model){
+		NetworkEquipment foundGood = null;
+		List<NetworkEquipment> allGoods =  goods.getListOfAvaliableGoods();
+		for(NetworkEquipment equip : allGoods){
+			if(equip.getModel().equalsIgnoreCase(model)){
+				foundGood = equip;
+				break;
+			}
+		}
+		return foundGood;
 	}
 }

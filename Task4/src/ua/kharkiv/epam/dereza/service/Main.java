@@ -15,16 +15,9 @@ import java.util.Scanner;
 import ua.kharkiv.epam.dereza.bean.NetworkEquipment;
 import ua.kharkiv.epam.dereza.bean.Router;
 import ua.kharkiv.epam.dereza.bean.WirelessRouter;
-import ua.kharkiv.epam.dereza.bean.generator.EquipmentGenerator;
-import ua.kharkiv.epam.dereza.bean.generator.ReflectionManualGenerator;
-import ua.kharkiv.epam.dereza.bean.generator.ManualRouterGen;
-import ua.kharkiv.epam.dereza.bean.generator.ManualWirelessRouterGen;
-import ua.kharkiv.epam.dereza.bean.generator.ReflectionRandomGenerator;
-import ua.kharkiv.epam.dereza.bean.generator.RandRouterGen;
-import ua.kharkiv.epam.dereza.bean.generator.RandWirelessRouterGen;
-import ua.kharkiv.epam.dereza.dao.Basket;
-import ua.kharkiv.epam.dereza.dao.Goods;
-import ua.kharkiv.epam.dereza.dao.Orders;
+import ua.kharkiv.epam.dereza.bean.generator.*;
+import ua.kharkiv.epam.dereza.dao.*;
+import ua.kharkiv.epam.dereza.socket.*;
 import ua.kharkiv.epam.dereza.util.Utility;
 
 /**
@@ -34,34 +27,39 @@ import ua.kharkiv.epam.dereza.util.Utility;
  *
  */
 public class Main {
-	 
+
 	public static final String basename = "messages";
-	
+
 	public static Locale[] getAvaliableLocales(){
 		return new Locale[]{new Locale("en","US"), new Locale("ru","RU")};
 	}
-	
+
 	public static void main(String[] args) {
 		Map<String, Class> classes = new HashMap<String, Class>();
 		classes.put("Router", ua.kharkiv.epam.dereza.bean.Router.class);
 		classes.put("WirelessRouter", ua.kharkiv.epam.dereza.bean.WirelessRouter.class);
-		
+
 		Currency currency = Currency.getInstance("UAH");
 		EquipmentGenerator generator = null;
 		ShopService service = new ShopService(new Basket(), new Goods(),
 				new Orders(), new AdReccomendation());
-		
+
 		init(service.getGoods());
-		
+
+		// starts socketServer
+		//HandlerFactory factory = new ClientHandlerFactory(service);
+		HandlerFactory factory = new TcpHandlerFactory();
+		new SocketServer(factory);
+
 		// Console menu
 		Scanner scanner = new Scanner(System.in);
 		Locale locale = chooseLocale(scanner);
 		boolean flag = true;
 		while (flag) {
 			scanner = new Scanner(System.in);
-			
+
 			printMenu();
-			
+
 			System.out.println("Selection: ");
 			int selection = scanner.nextInt();
 
@@ -100,7 +98,7 @@ public class Main {
 				showNearestOrder(service, scanner);
 				break;
 			}
-			
+
 			case 8: {
 				while (generator == null){
 					ResourceBundle bundle = ResourceBundle.getBundle(basename, locale);
@@ -109,7 +107,7 @@ public class Main {
 					System.out.println("2 - " + bundle.getString("manual"));
 					System.out.println("3 - " + bundle.getString("random.with.reflection"));
 					System.out.println("4 - " + bundle.getString("manual.with.reflection"));
-					
+
 					int generatorType = scanner.nextInt();
 					if(generatorType == 1){
 						generator = new RandRouterGen();
@@ -129,7 +127,7 @@ public class Main {
 				addNewGood(service, scanner, generator, locale);
 				break;
 			}
-			
+
 			case 9: {
 				flag = false; // Exit
 				break;
@@ -142,7 +140,7 @@ public class Main {
 		}// menu cycle
 		scanner.close();
 	}
-	
+
 	public static void init(Goods goods) {
 		goods.addGood(new Router("wr643", 0.7, 11, new BigDecimal(200), "a/b/g/n", "noOS"), 4);
 		goods.addGood(new Router("wr642", 0.3, 8, new BigDecimal(230), "b/g/n", "noOS"), 3);
@@ -157,18 +155,18 @@ public class Main {
 		goods.addGood(new WirelessRouter("wr652", 2.4, 8, new BigDecimal(1391), "a/b/n", "noOS", true));
 		goods.addGood(new WirelessRouter("wr621", 3.7, 16, new BigDecimal(999), "a/b/n", "noOS", false), 3);
 	}
-	
+
 	public static Locale chooseLocale(Scanner scanner){
-			System.out.println("Please choose locale :");
-			Locale[] locales = getAvaliableLocales();
-			for(int i=0; i<locales.length; i++){
-				System.out.println( i + " " + locales[i]);
-			}
-			int chosenLocale = scanner.nextInt();
-			
-			return locales[chosenLocale];
+		System.out.println("Please choose locale :");
+		Locale[] locales = getAvaliableLocales();
+		for(int i=0; i<locales.length; i++){
+			System.out.println( i + " " + locales[i]);
+		}
+		int chosenLocale = scanner.nextInt();
+
+		return locales[chosenLocale];
 	}
-	
+
 	public static void printMenu(){
 		System.out.println("\nPlease Make a selection:");
 		System.out.println("[1]Print avaliable list of goods");
@@ -181,7 +179,7 @@ public class Main {
 		System.out.println("[8]Add new good");
 		System.out.println("[9]Exit");
 	}
-	
+
 	public static void showAvaliableGoods(ShopService service){
 		System.out.println("\nGoods in our shop:");
 		List<NetworkEquipment> avaliableGoods = service.getGoods().getListOfAvaliableGoods();
@@ -189,30 +187,30 @@ public class Main {
 			System.out.println("[" + i + "] " + avaliableGoods.get(i));
 		}
 	}
-	
+
 	public static void addGoodToBasket(ShopService service, Scanner scanner){
 		List<NetworkEquipment> avaliableGoods = service.getGoods().getListOfAvaliableGoods();
 
 		System.out.println("Input the number of good:");
 		try{
 			int numberOfGood = Utility.readIntInRange(0, avaliableGoods.size(), scanner);
-	
+
 			int avaliableCount = service.getGoods().getAvaliableCountOfGood(avaliableGoods.get(numberOfGood));
 			System.out.println("There are " + avaliableCount + " items of good");
-			
+
 			if (avaliableCount != 0) {
 				System.out.println("Input desired count of good:");
 				int desiredCountOfGood = 0;
 				desiredCountOfGood = Utility.readIntInRange(0, avaliableCount, scanner);
 				service.putGoodToBasket(avaliableGoods.get(numberOfGood), desiredCountOfGood);
 				System.out.println("Good was added");
-				}
+			}
 		}catch(IllegalArgumentException e){
 			System.out.println("Please repeat selection");
 		}
-				
+
 	}
-	
+
 	public static void lookIntoBasket(ShopService service){
 		System.out.println("\nMy basket contains:");
 		Map<NetworkEquipment, Integer> goodsInBasket = service.getBasket().getGoodsInBasket();
@@ -220,7 +218,7 @@ public class Main {
 			System.out.println("Good :" + entry.getKey() + ", count :" + entry.getValue());
 		}
 	}
-	
+
 	public static void checkout(ShopService service, Currency currency, Locale locale){
 		ResourceBundle bundle = ResourceBundle.getBundle(basename, locale);
 		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
@@ -228,14 +226,14 @@ public class Main {
 		String bill = nf.format(service.checkOut().doubleValue());
 		System.out.println("\n" + bundle.getString("your.bill") + " " + bill);
 	}
-	
+
 	public static void showLastAddedFiveGoods(ShopService service){
 		System.out.println("\n Last added:");
 		for(Map.Entry<NetworkEquipment, Integer> entry : service.getAdRec().getLastAddedFiveGoods().entrySet()){
 			System.out.println("Equipment :" + entry.getKey() + ", count :" + entry.getValue());
 		}
 	}
-	
+
 	public static void showOrdersInTimeFrame(ShopService service, Scanner scanner){
 		System.out.println("Input date in next format - yyyy-MM-dd HH:mm");
 		System.out.println("From :");
@@ -246,24 +244,24 @@ public class Main {
 		Date to = Utility.parseDate(strTo);
 
 		Map<Date, Map<NetworkEquipment, Integer>> orders = service
-				.getOrders().getOrdersInTimeFrame(from, to);				
+				.getOrders().getOrdersInTimeFrame(from, to);
 		System.out.println("Orders :");
 		for(Entry<Date, Map<NetworkEquipment, Integer>> entry : orders.entrySet()){
-			
+
 			System.out.println("Purchase was made :" + entry.getKey());
-			
+
 			for(Entry<NetworkEquipment, Integer> purchase : entry.getValue().entrySet()){
 				System.out.println("good :" + purchase.getKey() + ", count :" + purchase.getValue());
 			}
 		}
 	}
-	
+
 	public static void showNearestOrder(ShopService service, Scanner scanner){
 		System.out.println("Input date in next format - yyyy-MM-dd HH:mm");
 		System.out.println("Date :");
 		String strDate = scanner.next();
 		Date date = Utility.parseDate(strDate);
-		
+
 		Entry<Date, Map<NetworkEquipment, Integer>> entry = service
 				.getOrders().getNearestOrder(date);
 		System.out.println("Order :");
@@ -273,20 +271,20 @@ public class Main {
 			for (Entry<NetworkEquipment, Integer> purchase : entry.getValue().entrySet()) {
 				System.out.println("good :" + purchase.getKey()	+ ", count :" + purchase.getValue());
 			}
-		} 
+		}
 	}
-	
+
 	public static void addNewGood(ShopService service, Scanner scanner,
 			EquipmentGenerator generator, Locale locale) {
 		ResourceBundle bundle = ResourceBundle.getBundle(basename, locale);
 		System.out.println(bundle.getString("which.product.would.you.like.to.create"));
 		System.out.println(bundle.getString("router.or.wirelessrouter") + ", "
 				+ bundle.getString("please.type.in.type.of.device"));
-			
+
 		String product = scanner.next();
 		NetworkEquipment newEquip = null;
 		try{
-			newEquip = generator.generate(product);		
+			newEquip = generator.generate(product);
 		}catch(Exception ex){
 			System.out.println(bundle.getString("cannot.generate.good"));
 		}
