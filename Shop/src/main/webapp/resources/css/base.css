@@ -1,5 +1,5 @@
 #mainBody {/* background: url(../images/seperator.png) repeat-x 0 0; */ border-top:2px solid #dedede; padding-top: 18px;}
-#carouselBlk,#header{background: url(../images/headerRepeat.png) repeat-x 0 0 #f7f7f7;}
+#carouselBlk, header{background: url(../images/headerRepeat.png) repeat-x 0 0 #f7f7f7;}
 #srchFld {background: url(../images/search.png) no-repeat 4px center #fff;}
 .tag {background:url(../images/new.png) no-repeat 0 0; position: absolute; display:block; top: -4px;right: -18px; height:48px; width:48px;}
 .clr{clear:both;}
@@ -50,12 +50,12 @@
 .navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus {color:#fff; background-color: #CF0007;text-shadow: none;}
 
 /* Footer section--------------- */
-#footerSection {background: #202020;color: white;padding: 28px 0 44px;margin-top: 20px;border-top: 1px solid #444;}
-#footerSection a{color:#ccc; font-size:11px; padding:0; line-height:24px; display:block; }
-#footerSection a:hover{color:#fff;  }
-#footerSection  #socialMedia a{ min-width:25px; display:inline; margin-right:6px; text-align:center; line-height:1.5em;}
+footer {background: #202020;color: white;padding: 28px 0 44px;margin-top: 20px;border-top: 1px solid #444;}
+footer a{color:#ccc; font-size:11px; padding:0; line-height:24px; display:block; }
+footer a:hover{color:#fff;  }
+footer  #socialMedia a{ min-width:25px; display:inline; margin-right:6px; text-align:center; line-height:1.5em;}
 #socialMedia img{max-width:60px;}
-#footerSection  #socialMedia a:hover{background:none;}
+footer  #socialMedia a:hover{background:none;}
 /* ===================================================== */
 
 /* Light Box------------------- */
@@ -99,7 +99,7 @@
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
 .navbar .brand {float: none;text-align: center;}
-#header, #carouselBlk{margin: 0 -20px;}
+header, #carouselBlk{margin: 0 -20px;}
 #topMenu{height:0}
 .navbar-search {margin-top: 8px;width: 100%;float: none;}
 #topMenu{height: auto;float: none;}
@@ -108,7 +108,7 @@
  }
 /* Landscape phones and down */
 @media (max-width: 480px) {
-#header, #carouselBlk{margin: 0 -20px;}
+header, #carouselBlk{margin: 0 -20px;}
 #topMenu{height:0}
 #topMenu{height: auto;float: none;}
 #topMenu li{float: none;}
