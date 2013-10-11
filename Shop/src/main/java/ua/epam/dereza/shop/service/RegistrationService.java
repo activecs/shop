@@ -1,6 +1,5 @@
 package ua.epam.dereza.shop.service;
 
-import java.util.List;
 import ua.epam.dereza.shop.db.dto.UserDTO;
 
 /**
@@ -23,7 +22,7 @@ public interface RegistrationService {
 	 * Adds new user
 	 * 
 	 * @param newUser
-	 * @return list of errors
+	 * @return true if user was created
 	 */
-	public List<String> saveUser(UserDTO newUser);
+	public boolean saveUser(UserDTO newUser);
 }

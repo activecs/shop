@@ -38,6 +38,7 @@ public class BeanTransformer {
 		newUser.setPostCode(new Integer(formBean.getPostcode()));
 		newUser.setAdditionalInfo(formBean.getAdditionalInfo());
 		newUser.setPhone(formBean.getPhone());
+		newUser.setAvatar(formBean.getAvatar());
 		SimpleDateFormat simpleDate = new SimpleDateFormat("dd-mm-yyyy");
 		try {
 			newUser.setBirthDate(simpleDate.parse(formBean.getBirthDate()));

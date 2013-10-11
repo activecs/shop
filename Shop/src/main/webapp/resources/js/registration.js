@@ -1,7 +1,7 @@
 $(window).load(function() {
 	
 	// write expected captcha to hidden field
-	captcha.writeToHiddenField();
+	//captcha.writeToHiddenField();
 	
 	$('#registration-form').on('submit', function(event) {
 		if (!registration.checkForm()) {
@@ -91,7 +91,7 @@ var registration = {
 	},
 	// checks city
 	validateCity : function(city) {
-		var re = /\w{2,20}([- ]\w{2,20}|)/;
+		var re = /([А-я]|[A-z]){2,20}([- ]([А-я]|[A-z]){2,20}|)/;
 		return re.test(city);
 	},
 	// checks email

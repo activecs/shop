@@ -1,1 +1,1 @@
-<jsp:forward page="WEB-INF/pages/registration.jsp"></jsp:forward>
+<jsp:forward page="WEB-INF/pages/index.jsp"></jsp:forward>

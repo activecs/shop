@@ -12,24 +12,26 @@ import ua.epam.dereza.shop.core.Constants;
 import ua.epam.dereza.shop.util.Cryptographer;
 
 /**
- * CaptchaService for session
+ * Captcha service for hidden field
  * 
  * @author Eduard_Dereza
  *
  */
-public class CaptchaServiceSession extends CaptchaService {
+public class CaptchaServiceHidden extends CaptchaService {
 
-	public CaptchaServiceSession(int captchaLifetime) {
+	public CaptchaServiceHidden(int captchaLifetime) {
 		super(captchaLifetime);
 	}
 
 	@Override
-	public List<String> validateCaptcha(HttpServletRequest request, RegistrationForm formBean) {
+	public List<String> validateCaptcha(HttpServletRequest request,RegistrationForm formBean) {
 		// cleans expired captchas
 		cleanCaptchaMaps();
 
 		List<String> errors = new ArrayList<String>();
-		String expectedCaptcha = (String) request.getSession().getAttribute(Constants.CAPTCHA_ID);
+
+		// determine captcha's store mode and checks it
+		String expectedCaptcha = formBean.getExpectedCaptcha();
 		String formCaptcha = formBean.getCaptcha();
 
 		if(formCaptcha == null || expectedCaptcha == null)
@@ -47,23 +49,25 @@ public class CaptchaServiceSession extends CaptchaService {
 
 		return errors;
 	}
+
 	@Override
 	public void attachCaptcha(String keyword, HttpServletRequest request,
 			HttpServletResponse response) {
 
-		String encodedCaptcha = Cryptographer.encode(keyword);
-
-		// adds encoded captcha to session's attributes
-		request.getSession().setAttribute(Constants.CAPTCHA_ID, encodedCaptcha);
-
-		// added for checking dates
-		synchronized (pairs) {
-			pairs.put(encodedCaptcha, new Date());
+		String captchaID = Cryptographer.encode(keyword);
+		synchronized (mapping) {
+			mapping.put(captchaID, keyword);
 		}
+		synchronized (pairs) {
+			pairs.put(captchaID, new Date());
+		}
+
+		request.setAttribute(Constants.CAPTCHA_ID, captchaID);
 	}
+
 	@Override
 	public String getKeyword(String captchaID) {
-		throw new UnsupportedOperationException();
+		return mapping.get(captchaID);
 	}
 
 }

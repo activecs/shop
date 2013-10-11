@@ -64,7 +64,7 @@ public class BeanValidator {
 			bean.setAddress2("");
 		}
 		if (bean.getCity() == null
-				|| !bean.getCity().matches("\\w{2,20}([- ]\\w{2,20}|)")) {
+				|| !bean.getCity().matches("([А-я]|[A-z]){2,20}([- ]([А-я]|[A-z]){2,20}|)")) {
 			errors.add("Check your city");
 			bean.setCity("");
 		}

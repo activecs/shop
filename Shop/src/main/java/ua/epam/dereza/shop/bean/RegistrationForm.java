@@ -20,6 +20,9 @@ public class RegistrationForm {
 	private String postcode;
 	private String additionalInfo;
 	private String phone;
+	private String captcha;
+	private String expectedCaptcha;
+	private String avatar;
 
 	public String getFirstName() {
 		return firstName;
@@ -93,14 +96,35 @@ public class RegistrationForm {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	public String getCaptcha() {
+		return captcha;
+	}
+	public void setCaptcha(String captcha) {
+		this.captcha = captcha;
+	}
+	public String getExpectedCaptcha() {
+		return expectedCaptcha;
+	}
+	public void setExpectedCaptcha(String expectedCaptcha) {
+		this.expectedCaptcha = expectedCaptcha;
+	}
+	public String getAvatar() {
+		return avatar;
+	}
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
 	@Override
 	public String toString() {
-		return "RegistrationBean [firstName="
-				+ firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", birthDt=" + birthDate
-				+ ", company=" + company + ", address1=" + address1
-				+ ", address2=" + address2 + ", city=" + city + ", postCode="
-				+ postcode + ", additionalInfo=" + additionalInfo + ", phone="
-				+ phone + "]";
+		return "RegistrationForm [firstName=" + firstName + ", lastName="
+				+ lastName + ", email=" + email + ", password=" + password
+				+ ", birthDate=" + birthDate + ", company=" + company
+				+ ", address1=" + address1 + ", address2=" + address2
+				+ ", city=" + city + ", postcode=" + postcode
+				+ ", additionalInfo=" + additionalInfo + ", phone=" + phone
+				+ ", captcha=" + captcha + ", expectedCaptcha="
+				+ expectedCaptcha + ", avatar=" + avatar
+				+ "]";
 	}
 }

@@ -1,8 +1,10 @@
 <%@ include file="/WEB-INF/jspf/directives/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directives/taglib.jspf" %>
+<%-- bundle basename for localization --%>
+<fmt:bundle basename="messages" />
 
 <title>Netshop online Shopping cart</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="Eduard Dereza">	

@@ -4,32 +4,135 @@
 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
-
+	
+	<!--***** Welcome Page *****-->
 	<welcome-file-list>
 		<welcome-file>
 			index.jsp
 		</welcome-file>
 	</welcome-file-list>
-
-	<!-- Session Configuration -->
+	<!--***** Welcome Page End*****-->
+	
+	<!-- Error page -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/pages/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/pages/error.jsp</location>
+	</error-page>
+	<!-- Error page end -->
+	
+	<!--***** Session Configuration *****-->
 	<session-config>
-		<session-timeout>5</session-timeout>
+		<session-timeout>10</session-timeout>
 		<cookie-config>
-			<max-age>300</max-age>
+			<max-age>600</max-age>
 		</cookie-config>
 	</session-config>
-
+	<!--***** Session Configuration End *****-->
+	
+	<!--***** Context Param  *****-->
 	<context-param>
-		<description>We allow 2 mods session and cookie</description>
-		<param-name>captchaMode</param-name>
-		<param-value>cookie</param-value>
+		<param-name>externalResources</param-name>
+		<param-value>C:\shop\</param-value>
 	</context-param>
-
+	
+	<context-param>
+		<description>We allow 3 mods session, cookie, hiddenField</description>
+		<param-name>captchaMode</param-name>
+		<param-value>hiddenField</param-value>
+	</context-param>
+	
+	<context-param>
+		<description>default value 5*60*1000 (5 minutes)</description>
+		<param-name>captchaLifetime</param-name>
+		<param-value>300000</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>encoding</param-name>
+		<param-value>UTF-8</param-value>
+	</context-param>
+	
+	<context-param>
+		<description>We allow 2 mods session, cookie</description>
+		<param-name>localeMode</param-name>
+		<param-value>session</param-value>
+	</context-param>
+	
+	<context-param>
+		<description>It is relevant only for cookie locale mode. defaultValue 60*60*24*365(1 year)</description>
+		<param-name>localeLifetime</param-name>
+		<param-value>31536000</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>availableLocales</param-name>
+		<param-value>en,ru</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>defaultLocale</param-name>
+		<param-value>en</param-value>
+	</context-param>
+	<!--***** Context Param  End*****-->
+	
 	<jsp-config>
 		<jsp-property-group>
 			<url-pattern>*.jsp</url-pattern>
 			<scripting-invalid>true</scripting-invalid>
 		</jsp-property-group>
 	</jsp-config>
-
+	
+	<!--***** FILTERS *****-->
+	<filter>
+		<display-name>GZipFilter</display-name>
+		<filter-name>GZipFilter</filter-name>
+		<filter-class>ua.epam.dereza.shop.filter.GZipFilter</filter-class>
+	</filter>
+	
+	<filter>
+		<display-name>FooterFilter</display-name>
+		<filter-name>FooterFilter</filter-name>
+		<filter-class>ua.epam.dereza.shop.filter.FooterFilter</filter-class>
+	</filter>
+	<filter>
+		<display-name>EncodingCacheFilter</display-name>
+		<filter-name>EncodingCacheFilter</filter-name>
+		<filter-class>ua.epam.dereza.shop.filter.EncodingCacheFilter</filter-class>
+	</filter>
+	<filter>
+		<display-name>LocaleFilter</display-name>
+		<filter-name>LocaleFilter</filter-name>
+		<filter-class>ua.epam.dereza.shop.filter.LocaleFilter</filter-class>
+	</filter>
+	
+	<!--***** FILTERS  MAPPING *****-->
+	<filter-mapping>
+		<filter-name>GZipFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>FooterFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+ 	<filter-mapping>
+		<filter-name>EncodingCacheFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>LocaleFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!--***** FILTERS END *****-->
+	
+	<!--***** Resource cleanup (fileUpload) *****-->
+	<listener>
+    	<listener-class>
+      		org.apache.commons.fileupload.servlet.FileCleanerCleanup
+    	</listener-class>
+  	</listener>
+	
 </web-app>

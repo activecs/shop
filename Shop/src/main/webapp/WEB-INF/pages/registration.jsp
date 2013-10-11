@@ -12,50 +12,12 @@
 	<div id="mainBody">
 		<div class="container">
 			<div class="row">
-				
 				<!-- Sidebar ================================================== -->
-				<div id="sidebar" class="span3">
-					<div class="well well-small">
-						<a id="myCart" href="product_summary.html"> 
-							<img src="<c:url value='/resources/images/ico-cart.png' />" alt="cart">3 Items in your cart <span class="badge badge-warning pull-right">$155.00</span>
-						</a>
-					</div>
-					<ul id="sideManu" class="nav nav-tabs nav-stacked">
-						<li class="subMenu open"><a> ELECTRONICS [230]</a>
-							<ul>
-								<li><a class="active" href="products.html"><i class="icon-chevron-right"></i>Cameras (100) </a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Computers, Tablets & laptop (30)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Mobile Phone (80)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Sound & Vision (15)</a></li>
-							</ul></li>
-						<li class="subMenu"><a> CLOTHES [840] </a>
-							<ul style="display: none">
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Women's Clothing (45)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Women's Shoes (8)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Women's Hand Bags (5)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Men's Clothings (45)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Men's Shoes (6)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Kids Clothing (5)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Kids Shoes (3)</a></li>
-							</ul></li>
-						<li class="subMenu"><a>FOOD AND BEVERAGES [1000]</a>
-							<ul style="display: none">
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Angoves (35)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Bouchard Aine & Fils (8)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>French Rabbit (5)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Louis Bernard (45)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>BIB Wine (Bag in Box) (8)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Other Liquors & Wine (5)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Garden (3)</a></li>
-								<li><a href="products.html"><i class="icon-chevron-right"></i>Khao Shong (11)</a></li>
-							</ul></li>
-					</ul>
-					<br />
-				</div>
+				<%@ include file="/WEB-INF/jspf/sidebar.jspf"%>
 				<!-- Sidebar end=============================================== -->
 				<div class="span9">
 					<ul class="breadcrumb">
-						<li><a href="index.html">Home</a> <span class="divider">/</span></li>
+						<li><a href="<c:url value='/' />">Home</a> <span class="divider">/</span></li>
 						<li class="active">Registration</li>
 					</ul>
 					<h3>Registration</h3>
@@ -68,7 +30,7 @@
 								</div>
 							</c:forEach>
 						</div>
-						<form action="/registration" class="form-horizontal" id="registration-form" method="post">
+						<form action="<c:url value='/registration' />" class="form-horizontal" id="registration-form" method="post" enctype="multipart/form-data" >
 							<h4>Your personal information</h4>
 
 							<div class="control-group">
@@ -155,15 +117,12 @@
 									<input type="text" name="phone" id="phone" placeholder="Phone number" value="${formBean.phone}" />
 								</div>
 							</div>
+							<%-- custom tag for captcha --%>
+							<shop:captcha />
 							<div class="control-group">
-								<label class="control-label" for="captcha">Captcha <sup>*</sup></label>
+								<label class="control-label" for="phone">Avatar</label>
 								<div class="controls">
-									<img alt="captcha" src="<c:url value='/captcha.png' />"><br>
-								</div>
-							</div>
-							<div class="control-group">
-								<div class="controls">
-									<input type="text" name="captcha" id="captcha" placeholder="Enter symbols from image" />
+									<input type="file" name="avatar" id="avatar" placeholder="Path to image" accept="image/x-png, image/gif, image/jpeg" />
 								</div>
 							</div>
 							<div class="control-group">
@@ -172,8 +131,7 @@
 								</div>
 							</div>
 							<div class="control-group">
-								<div class="controls">
-									<input type="hidden" name="expectedCaptcha"	id="expectedCaptcha" />  
+								<div class="controls">  
 									<input class="btn btn-large btn-success" type="submit" value="Register" />
 								</div>
 							</div>

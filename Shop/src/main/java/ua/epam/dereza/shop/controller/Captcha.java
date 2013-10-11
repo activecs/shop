@@ -16,13 +16,12 @@ import ua.epam.dereza.shop.core.Constants;
 import ua.epam.dereza.shop.service.CaptchaService;
 
 /**
- * Generate new captcha image and saves md5 code of captcha's symbols in session
- * or cookie
+ * Generate new captcha image and saves md5 code of captcha's symbols in session, cookie or hidden field
  * 
  * @author Eduard_Dereza
  * 
  */
-@WebServlet(name = "captchaGenerator", urlPatterns = {"/captcha.png"})
+@WebServlet("/captcha.png")
 public class Captcha extends HttpServlet {
 
 	private static final long serialVersionUID = -1567800531379563125L;
@@ -37,9 +36,18 @@ public class Captcha extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String captchaKeyword = captchaService.generateKeyword();
-		BufferedImage bufferedImage = captchaService.generateImage(captchaKeyword);
-		captchaService.attachCaptcha(captchaKeyword, request, response);
+		String captchaKeyword = null;
+		BufferedImage bufferedImage = null;
+
+		if(getServletContext().getInitParameter(Constants.CAPTCHA_MODE).equals(Constants.CAPTCHA_MODE_HIDDEN)){
+			String captchaID = request.getParameter(Constants.CAPTCHA_ID);
+			captchaKeyword = captchaService.getKeyword(captchaID);
+			bufferedImage = captchaService.generateImage(captchaKeyword);
+		}else{
+			captchaKeyword = captchaService.generateKeyword();
+			bufferedImage = captchaService.generateImage(captchaKeyword);
+			captchaService.attachCaptcha(captchaKeyword, request, response);
+		}
 
 		// write image into outputStream
 		response.setContentType("image/png");

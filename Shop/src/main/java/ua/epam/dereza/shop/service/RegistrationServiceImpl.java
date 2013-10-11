@@ -1,8 +1,5 @@
 package ua.epam.dereza.shop.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 import ua.epam.dereza.shop.db.dao.UserDAO;
@@ -39,19 +36,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
-	public List<String> saveUser(UserDTO newUser){
-		List<String> errors = new ArrayList<String>();
+	public boolean saveUser(UserDTO newUser){
 		if(existCurrentUser(newUser.getEmail())){
 			String message = "User with given email already exist";
-			errors.add(message);
 			log.info(message);
+			return false;
 		}else{
 			newUser.setEnabled(true);
 			newUser.setPassword(Cryptographer.encode(newUser.getPassword()));
 			userDAO.saveUser(newUser);
 			log.info("was created new user ->" + newUser);
+			return true;
 		}
-
-		return errors;
 	}
 }

@@ -1,6 +1,7 @@
 package ua.epam.dereza.shop.db.dto;
 
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Instances of this class are used for interaction with the database
@@ -12,6 +13,7 @@ import java.util.Date;
 public class UserDTO {
 
 	private String email;
+	private String avatar;
 	private Boolean enabled;
 	private String firstName;
 	private String lastName;
@@ -24,16 +26,24 @@ public class UserDTO {
 	private int postCode;
 	private String additionalInfo;
 	private String phone;
+	private Role role;
+	private Locale locale;
+
+	public static enum Role {
+		USER, ADMIN;
+	}
 
 	public UserDTO() {
 	}
 
-	public UserDTO(String email, Boolean enabled, String firstName,
-			String lastName, String password, Date birthDate, String company,
-			String address1, String address2, String city, int postCode,
-			String additionalInfo, String phone) {
+	public UserDTO(String email, String avatar, Boolean enabled,
+			String firstName, String lastName, String password, Date birthDate,
+			String company, String address1, String address2, String city,
+			int postCode, String additionalInfo, String phone, Role role,
+			Locale locale) {
 		super();
 		this.email = email;
+		this.avatar = avatar;
 		this.enabled = enabled;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -46,6 +56,24 @@ public class UserDTO {
 		this.postCode = postCode;
 		this.additionalInfo = additionalInfo;
 		this.phone = phone;
+		this.role = role;
+		this.locale = locale;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public Boolean getEnabled() {
@@ -70,14 +98,6 @@ public class UserDTO {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getPassword() {
@@ -152,6 +172,33 @@ public class UserDTO {
 		this.phone = phone;
 	}
 
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Locale getLocale() {
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDTO [email=" + email + ", avatar=" + avatar + ", enabled="
+				+ enabled + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", password=" + password + ", birthDate="
+				+ birthDate + ", company=" + company + ", address1=" + address1
+				+ ", address2=" + address2 + ", city=" + city + ", postCode="
+				+ postCode + ", additionalInfo=" + additionalInfo + ", phone="
+				+ phone + ", role=" + role + ", locale=" + locale + "]";
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -169,17 +216,6 @@ public class UserDTO {
 			return false;
 		UserDTO other = (UserDTO) obj;
 		return email.equals(other.email);
-	}
-
-	@Override
-	public String toString() {
-		return "UserDTO [email=" + email + ", enabled=" + enabled
-				+ ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", password=" + password + ", birthDate=" + birthDate
-				+ ", company=" + company + ", address1=" + address1
-				+ ", address2=" + address2 + ", city=" + city + ", postCode="
-				+ postCode + ", additionalInfo=" + additionalInfo + ", phone="
-				+ phone + "]";
 	}
 
 }
