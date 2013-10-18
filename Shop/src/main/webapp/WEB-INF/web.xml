@@ -59,7 +59,7 @@
 	<context-param>
 		<description>We allow 2 mods session, cookie</description>
 		<param-name>localeMode</param-name>
-		<param-value>session</param-value>
+		<param-value>cookie</param-value>
 	</context-param>
 	
 	<context-param>
@@ -88,6 +88,12 @@
 	
 	<!--***** FILTERS *****-->
 	<filter>
+		<display-name>EncodingCacheFilter</display-name>
+		<filter-name>EncodingCacheFilter</filter-name>
+		<filter-class>ua.epam.dereza.shop.filter.EncodingCacheFilter</filter-class>
+	</filter>
+	
+	<filter>
 		<display-name>GZipFilter</display-name>
 		<filter-name>GZipFilter</filter-name>
 		<filter-class>ua.epam.dereza.shop.filter.GZipFilter</filter-class>
@@ -98,11 +104,7 @@
 		<filter-name>FooterFilter</filter-name>
 		<filter-class>ua.epam.dereza.shop.filter.FooterFilter</filter-class>
 	</filter>
-	<filter>
-		<display-name>EncodingCacheFilter</display-name>
-		<filter-name>EncodingCacheFilter</filter-name>
-		<filter-class>ua.epam.dereza.shop.filter.EncodingCacheFilter</filter-class>
-	</filter>
+	
 	<filter>
 		<display-name>LocaleFilter</display-name>
 		<filter-name>LocaleFilter</filter-name>
@@ -111,15 +113,15 @@
 	
 	<!--***** FILTERS  MAPPING *****-->
 	<filter-mapping>
+		<filter-name>EncodingCacheFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
 		<filter-name>GZipFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>FooterFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
- 	<filter-mapping>
-		<filter-name>EncodingCacheFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>

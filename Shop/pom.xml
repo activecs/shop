@@ -9,12 +9,16 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
+		<build.name>Shop</build.name>
 		<org.apache.tomcat.version>7.0.42</org.apache.tomcat.version>
+		<org.apache.tomcat.maven.version>2.1</org.apache.tomcat.maven.version>
 		<org.apache.log4j.version>1.2.17</org.apache.log4j.version>
 		<org.mockito.version>1.9.5</org.mockito.version>
-		<commons-fileupload.version>1.3</commons-fileupload.version>
+		<commons.fileupload.version>1.3</commons.fileupload.version>
 		<javax.mail.version>1.4</javax.mail.version>
 		<junit.version>4.11</junit.version>
+		<maven.resources.plugin.version>2.6</maven.resources.plugin.version>
+		<maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
 	</properties>
 
 	<dependencies>
@@ -23,14 +27,16 @@
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>${commons-fileupload.version}</version>
+			<version>${commons.fileupload.version}</version>
+			<scope>compile</scope>
 		</dependency>
-		
+
 		<!-- java mail -->
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>${javax.mail.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- junit -->
@@ -71,9 +77,45 @@
 			<artifactId>log4j</artifactId>
 			<version>${org.apache.log4j.version}</version>
 		</dependency>
-
 	</dependencies>
+
 	<build>
-		<finalName>Shop</finalName>
+		<finalName>${build.name}</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.plugin.version}</version>
+				<configuration>
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>${org.apache.tomcat.maven.version}</version>
+				<configuration>
+					<url>http://localhost:8080/manager/text</url>
+					<username>admin</username>
+					<password>admin</password>
+					<charset>utf-8</charset>
+					<update>true</update>
+				</configuration>
+			</plugin>
+
+		</plugins>
 	</build>
 </project>

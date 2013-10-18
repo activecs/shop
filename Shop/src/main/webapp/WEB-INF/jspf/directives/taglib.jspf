@@ -12,3 +12,4 @@ JSTL functions tag library.
 Custom shop's library
 ===========================================================================--%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="shop"%>
+<%@ taglib uri="http://www.shop.library.com" prefix="shopLibrary" %>

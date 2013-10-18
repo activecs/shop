@@ -1,26 +1,27 @@
 <div class="container">
 	<div class="row">
 		<div class="span3">
-			<h5>ACCOUNT</h5>
-			<a href="<c:url value='/account' />" >YOUR ACCOUNT</a> 
-			<a href="#">PERSONAL INFORMATION</a> 
-			<a href="#">ADDRESSES</a> 
-			<a href="#">DISCOUNT</a>
-			<a href="#">ORDER HISTORY</a>
+			<h5><fmt:message key="footer.account" bundle="${bundle}" /></h5>
+			<a href="<c:url value='/account' />" ><fmt:message key="footer.your.account" bundle="${bundle}" /></a> 
+			<a href="#"><fmt:message key="footer.personal.information" bundle="${bundle}" /></a> 
+			<a href="#"><fmt:message key="footer.addresses" bundle="${bundle}" /></a> 
+			<a href="#"><fmt:message key="footer.discount" bundle="${bundle}" /></a>
+			<a href="#"><fmt:message key="footer.order.history" bundle="${bundle}" /></a>
 		</div>
 		<div class="span3">
-			<h5>INFORMATION</h5>
-			<a href="<c:url value='/contact' />" >CONTACT</a> 
-			<a href="<c:url value='/registration' />" >REGISTRATION</a>
-			<a href="faq.html">FAQ</a>
+			<h5><fmt:message key="footer.information" bundle="${bundle}" /></h5>
+			<a href="<c:url value='/contact' />" ><fmt:message key="footer.contact" bundle="${bundle}" /></a> 
+			<a href="<c:url value='/registration' />" ><fmt:message key="footer.registration" bundle="${bundle}" /></a>
+			<a href="#">FAQ</a>
 		</div>
 		<div class="span3">
-			<h5>OUR OFFERS</h5>
-			<a href="#">NEW PRODUCTS</a> <a href="special_offer.html">SPECIAL OFFERS</a> 
-			<a href="#">MANUFACTURERS</a>
+			<h5><fmt:message key="footer.our.offers" bundle="${bundle}" /></h5>
+			<a href="#"><fmt:message key="footer.new.products" bundle="${bundle}" /></a> 
+			<a href="#"><fmt:message key="footer.special.offers" bundle="${bundle}" /></a> 
+			<a href="#"><fmt:message key="footer.manufacturers" bundle="${bundle}" /></a>
 		</div>
 		<div id="socialMedia" class="span3 pull-right">
-			<h5>SOCIAL MEDIA</h5>
+			<h5><fmt:message key="footer.social.media" bundle="${bundle}" /></h5>
 			<a href="#"><img width="60" height="60" src="<c:url value='/resources/images/facebook.png' />" title="facebook" alt="facebook" /></a> 
 			<a href="#"><img width="60" height="60" src="<c:url value='/resources/images/youtube.png' />" title="youtube" alt="youtube" /></a>
 		</div>

@@ -20,7 +20,7 @@
 					<p>	18 Fresno,<br/> 
 						CA 93727, USA <br/><br/> 
 						info@netshop.com<br/>
-						﻿Tel 123-456-6780<br/> 
+						Tel 123-456-6780<br/> 
 						Fax 123-456-5679<br/> 
 						web:netshop.com
 					</p>

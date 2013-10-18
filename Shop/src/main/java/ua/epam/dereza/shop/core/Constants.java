@@ -41,6 +41,7 @@ public final class Constants {
 	public static final String LOCALE_MODE_SESSION = "session";
 	public static final String LOCALE_MODE_COOKIE = "cookie";
 	public static final String LOCALE_LIFETIME = "localeLifetime";
+	public static final String LOCALE_MANAGER = "localeManager";
 
 	public static final String ENCODING = "encoding";
 }
