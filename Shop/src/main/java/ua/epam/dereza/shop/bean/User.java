@@ -1,4 +1,4 @@
-package ua.epam.dereza.shop.db.dto;
+package ua.epam.dereza.shop.bean;
 
 import java.util.Date;
 import java.util.Locale;
@@ -10,11 +10,11 @@ import java.util.Locale;
  * @author Eduard_Dereza
  * 
  */
-public class UserDTO {
+public class User {
 
+	private int id;
 	private String email;
 	private String avatar;
-	private Boolean enabled;
 	private String firstName;
 	private String lastName;
 	private String password;
@@ -26,17 +26,21 @@ public class UserDTO {
 	private int postCode;
 	private String additionalInfo;
 	private String phone;
-	private Role role;
 	private Locale locale;
+	private Role role = Role.USER;
+	private Boolean enabled;
+	private int loginAttemptCount;
+	private Date lastSuccessLogin;
+	private Date nextUnban;
 
 	public static enum Role {
 		USER, ADMIN;
 	}
 
-	public UserDTO() {
+	public User() {
 	}
 
-	public UserDTO(String email, String avatar, Boolean enabled,
+	public User(String email, String avatar, Boolean enabled,
 			String firstName, String lastName, String password, Date birthDate,
 			String company, String address1, String address2, String city,
 			int postCode, String additionalInfo, String phone, Role role,
@@ -58,6 +62,14 @@ public class UserDTO {
 		this.phone = phone;
 		this.role = role;
 		this.locale = locale;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getEmail() {
@@ -188,15 +200,42 @@ public class UserDTO {
 		this.locale = locale;
 	}
 
+	public int getLoginAttemptCount() {
+		return loginAttemptCount;
+	}
+
+	public void setLoginAttemptCount(int loginAttemptCount) {
+		this.loginAttemptCount = loginAttemptCount;
+	}
+
+	public Date getLastSuccessLogin() {
+		return lastSuccessLogin;
+	}
+
+	public void setLastSuccessLogin(Date lastSuccessLogin) {
+		this.lastSuccessLogin = lastSuccessLogin;
+	}
+
+	public Date getNextUnban() {
+		return nextUnban;
+	}
+
+	public void setNextUnban(Date nextUnban) {
+		this.nextUnban = nextUnban;
+	}
+
 	@Override
 	public String toString() {
-		return "UserDTO [email=" + email + ", avatar=" + avatar + ", enabled="
-				+ enabled + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", password=" + password + ", birthDate="
-				+ birthDate + ", company=" + company + ", address1=" + address1
+		return "UserDTO [id=" + id + ", email=" + email + ", avatar=" + avatar
+				+ ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", password=" + password + ", birthDate=" + birthDate
+				+ ", company=" + company + ", address1=" + address1
 				+ ", address2=" + address2 + ", city=" + city + ", postCode="
 				+ postCode + ", additionalInfo=" + additionalInfo + ", phone="
-				+ phone + ", role=" + role + ", locale=" + locale + "]";
+				+ phone + ", locale=" + locale + ", role=" + role
+				+ ", enabled=" + enabled + ", loginAttemptCount="
+				+ loginAttemptCount + ", lastSuccessLogin=" + lastSuccessLogin
+				+ ", nextUnban=" + nextUnban + "]";
 	}
 
 	@Override
@@ -212,10 +251,9 @@ public class UserDTO {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!(obj instanceof UserDTO))
+		if (!(obj instanceof User))
 			return false;
-		UserDTO other = (UserDTO) obj;
+		User other = (User) obj;
 		return email.equals(other.email);
 	}
-
 }

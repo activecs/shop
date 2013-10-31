@@ -63,6 +63,7 @@ public class LocaleFilterBasicTest {
 		def = new Locale("en");
 
 		doReturn(context).when(config).getServletContext();
+		doReturn(context).when(request).getServletContext();
 		doReturn("en").when(context).getInitParameter(Constants.LOCALE_DEFAULT);
 		doReturn("en,ru").when(context).getInitParameter(Constants.LOCALE_AVAILABLE);
 		doReturn("31536000").when(context).getInitParameter(Constants.LOCALE_LIFETIME);
@@ -111,6 +112,8 @@ public class LocaleFilterBasicTest {
 		locales.add(ru);
 		locales.add(en);
 		doReturn(Constants.LOCALE_MODE_COOKIE).when(context).getInitParameter(Constants.LOCALE_MODE);
+		doReturn("/").when(context).getContextPath();
+
 		Cookie cookie = new Cookie("lang", ru.getLanguage());
 		doReturn(new Cookie[]{cookie}).when(request).getCookies();
 		doReturn(ru).when(request).getLocale();

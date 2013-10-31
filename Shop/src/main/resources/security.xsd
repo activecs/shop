@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ua.epam.dereza.shop/xml/security" xmlns:tns="http://ua.epam.dereza.shop/xml/security">
+	<xsd:element name="security">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="constraint" type="tns:constraint" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="constraint">
+		<xsd:sequence>
+			<xsd:element name="url-pattern" type="xsd:string" />
+			<xsd:element name="role" type="xsd:string" maxOccurs="unbounded" />
+		</xsd:sequence>	
+	</xsd:complexType>
+	
+</xsd:schema>

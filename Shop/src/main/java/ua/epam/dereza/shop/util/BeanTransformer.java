@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import org.apache.log4j.Logger;
 
 import ua.epam.dereza.shop.bean.RegistrationForm;
-import ua.epam.dereza.shop.db.dto.UserDTO;
+import ua.epam.dereza.shop.bean.User;
 
 /**
  * Transformer from bean to dto
@@ -24,8 +24,8 @@ public class BeanTransformer {
 	 * @param formBean
 	 * @return UserDTO
 	 */
-	public static UserDTO transform(RegistrationForm formBean){
-		UserDTO newUser = new UserDTO();
+	public static User transform(RegistrationForm formBean){
+		User newUser = new User();
 
 		newUser.setFirstName(formBean.getFirstName());
 		newUser.setLastName(formBean.getLastName());

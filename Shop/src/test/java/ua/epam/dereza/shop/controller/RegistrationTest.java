@@ -3,7 +3,6 @@ package ua.epam.dereza.shop.controller;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -23,9 +22,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import ua.epam.dereza.shop.core.Constants;
-import ua.epam.dereza.shop.db.dao.UserDAO;
-import ua.epam.dereza.shop.db.dao.UserDAOImpl;
-import ua.epam.dereza.shop.db.dto.UserDTO;
 import ua.epam.dereza.shop.service.CaptchaServiceCookie;
 import ua.epam.dereza.shop.service.CaptchaServiceSession;
 import ua.epam.dereza.shop.util.Cryptographer;
@@ -48,15 +44,11 @@ public class RegistrationTest {
 	Registration regServ = new Registration();
 
 	String captcha = "ZXCVB";
-	UserDAO userDAO;
 	Integer captchaLifetime = 1000;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-
-		userDAO = new UserDAOImpl();
-		doReturn(userDAO).when(context).getAttribute(Constants.USER_DAO);
 
 		doReturn("asdf").when(request).getParameter("firstName");
 		doReturn("asdf").when(request).getParameter("lastName");

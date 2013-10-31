@@ -1,8 +1,5 @@
 package ua.epam.dereza.shop.listener;
 
-import java.util.Date;
-import java.util.Locale;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -12,12 +9,15 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import ua.epam.dereza.shop.core.Constants;
-import ua.epam.dereza.shop.db.dao.UserDAO;
-import ua.epam.dereza.shop.db.dao.UserDAOImpl;
-import ua.epam.dereza.shop.db.dto.UserDTO;
+import ua.epam.dereza.shop.db.dao.DAOFactory;
+import ua.epam.dereza.shop.db.dao.mysql.MysqlDAOFactory;
 import ua.epam.dereza.shop.service.CaptchaServiceCookie;
 import ua.epam.dereza.shop.service.CaptchaServiceHidden;
 import ua.epam.dereza.shop.service.CaptchaServiceSession;
+import ua.epam.dereza.shop.service.ImageService;
+import ua.epam.dereza.shop.service.ImageServiceImpl;
+import ua.epam.dereza.shop.service.UserService;
+import ua.epam.dereza.shop.service.UserServiceImpl;
 
 /**
  * Application Lifecycle Listener implementation class ContextListener
@@ -32,8 +32,9 @@ public class ContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent arg) {
 		log.info("Application started");
 		ServletContext context = arg.getServletContext();
-		initDAO(context);
 		initCaptcha(context);
+		initDAO(context);
+		initServices(context);
 	}
 
 	@Override
@@ -41,34 +42,26 @@ public class ContextListener implements ServletContextListener {
 		log.info("Application shutted down");
 	}
 
+	private void initDAO(ServletContext context){
+		DAOFactory daoFactory = new MysqlDAOFactory();
+		context.setAttribute(Constants.DAO_FACTORY, daoFactory);
+	}
+
 	/**
-	 * Inits dao
+	 * Inits services
 	 * 
 	 * @param context
 	 */
-	private void initDAO(ServletContext context) {
-		// dao initialization
-		UserDAO userDAO = new UserDAOImpl();
-		userDAO.saveUser(new UserDTO(
-				"user1@yandex.ru",
-				"user1@yandex.ru.png",
-				true,
-				"Eduard",
-				"Dereza",
-				"24c9e15e52afc47c225b757e7bee1f9d",
-				new Date(),
-				"Home",
-				"",
-				"",
-				"Kharkiv",
-				61024,
-				"When you need more functionality, something beyond what you can get with the standard actions or EL, you don’t have to resort to scripting. In the next chapter, you’ll learn how to use the JSP Standard Tag Library 1.1 (JSTL 1.1) to do just about everything you’ll ever need, using a combination of tags and EL. Here’s a sneak peek of how to do our conditional forward without scripting.",
-				"0930238984", UserDTO.Role.USER, new Locale("ru")));
-		userDAO.saveUser(new UserDTO("user2", "", true, "", "", "user2",
-				new Date(), "", "", "", "", 1, "", "", UserDTO.Role.USER, new Locale("en")));
-		userDAO.saveUser(new UserDTO("user3", "", true, "", "", "user3",
-				new Date(), "", "", "", "", 1, "", "", UserDTO.Role.USER, new Locale("ru")));
-		context.setAttribute(Constants.USER_DAO, userDAO);
+	private void initServices(ServletContext context){
+		DAOFactory daoFactory = (DAOFactory)context.getAttribute(Constants.DAO_FACTORY);
+		// userService
+		UserService userService = new UserServiceImpl(daoFactory);
+		context.setAttribute(Constants.SERVICE_USER, userService);
+
+		// imageService
+		String externalResources = context.getInitParameter(Constants.EXTERNAL_RESOURCES);
+		ImageService imageService = new ImageServiceImpl(externalResources);
+		context.setAttribute(Constants.SERVICE_IMAGE, imageService);
 	}
 
 	/**

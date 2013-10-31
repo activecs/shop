@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import ua.epam.dereza.shop.bean.User;
 import ua.epam.dereza.shop.core.Constants;
-import ua.epam.dereza.shop.db.dto.UserDTO;
 import ua.epam.dereza.shop.service.ImageService;
 import ua.epam.dereza.shop.service.ImageServiceImpl;
 
@@ -43,7 +43,7 @@ public class Avatar extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		UserDTO userBean = (UserDTO) session.getAttribute(Constants.USER_BEAN);
+		User userBean = (User) session.getAttribute(Constants.USER_BEAN);
 		if(userBean == null){
 			response.sendError(404);
 			log.warn("Cannot find avatar because userBean == null");

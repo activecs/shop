@@ -100,9 +100,6 @@ public class LocaleFilter implements Filter {
 		Locale locale = getRightLocale(request);
 		localeManager.setLocale(locale, request, response);
 
-		if (log.isTraceEnabled())
-			log.trace("determinded locale ->" + locale.getLanguage());
-
 		reqWrapped = new LocaleRequestWrapper(request, locale);
 		chain.doFilter(reqWrapped, response);
 

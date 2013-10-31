@@ -24,6 +24,9 @@
 					<h3>Error </h3>
 					<hr class="soft" />
 					<c:set var="code" value="${requestScope['javax.servlet.error.status_code']}" scope="page" />
+					<c:if test="${code == '403'}">
+						<c:set var="errorMessage" value="${code} You don't have neccessary rights" scope="page" />
+					</c:if>
 					<c:if test="${code == '404'}">
 						<c:set var="errorMessage" value="${code} Page not found" scope="page" />
 					</c:if>

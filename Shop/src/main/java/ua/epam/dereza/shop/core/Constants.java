@@ -14,6 +14,16 @@ public final class Constants {
 	public static final String PAGE_FORGET_PASSWORD = "/WEB-INF/pages/forgetpass.jsp";
 	public static final String PAGE_CONTACT = "/WEB-INF/pages/contact.jsp";
 	public static final String PAGE_ACCOUNT = "/WEB-INF/pages/account.jsp";
+	public static final String PAGE_PRODUCTS = "/WEB-INF/pages/products.jsp";
+	
+	public static final String FORM_ERRORS = "errors";
+	public static final String FORM_BEAN = "formBean";
+	
+	// service
+	public static final String SERVICE_USER = "userService";
+	public static final String SERVICE_IMAGE = "imageService";
+
+	public static final String DAO_FACTORY = "daoFactory";
 
 	//captcha
 	public static final String  CAPTCHA_MODE = "captchaMode";
@@ -22,9 +32,6 @@ public final class Constants {
 	public static final String  CAPTCHA_MODE_HIDDEN = "hiddenField";
 	public static final String  CAPTCHA_SERVICE = "captchaService";
 	public static final String 	CAPTCHA_ID = "captchaID";
-
-	// dao
-	public static final String  USER_DAO = "userDAO";
 
 	public static final String USER_BEAN = "userBean";
 
@@ -44,4 +51,7 @@ public final class Constants {
 	public static final String LOCALE_MANAGER = "localeManager";
 
 	public static final String ENCODING = "encoding";
+
+	public static final String SECURITY_FILENAME= "securityFilename";
+	public static final String SECURITY_VALIDATION_SCHEMA= "securityValidationSchema";
 }

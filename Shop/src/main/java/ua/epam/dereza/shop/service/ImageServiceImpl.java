@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.apache.commons.fileupload.FileItem;
 
-import ua.epam.dereza.shop.db.dto.UserDTO;
+import ua.epam.dereza.shop.bean.User;
 import ua.epam.dereza.shop.util.ImageUtil;
 
 /**
@@ -32,7 +32,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public FileInputStream getAvatar(UserDTO user) throws FileNotFoundException {
+	public FileInputStream getAvatar(User user) throws FileNotFoundException {
 		String avatarName = user.getAvatar();
 		File avatar = new File(avatarDir + avatarName);
 		avatar.mkdirs();
@@ -47,7 +47,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public void saveAvatar(FileItem image, UserDTO user) throws IOException {
+	public void saveAvatar(FileItem image, User user) throws IOException {
 		if(image.getSize() == 0){
 			user.setAvatar(AVATAR_DEFAULT);
 			return;

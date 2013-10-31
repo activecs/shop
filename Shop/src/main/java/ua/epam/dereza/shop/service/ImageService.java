@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.apache.commons.fileupload.FileItem;
 
-import ua.epam.dereza.shop.db.dto.UserDTO;
+import ua.epam.dereza.shop.bean.User;
 
 /**
  * Service for uploading and downloading images
@@ -23,7 +23,7 @@ public interface ImageService {
 	 * @return stream of avatar file
 	 * @throws FileNotFoundException
 	 */
-	public FileInputStream getAvatar(UserDTO user) throws FileNotFoundException;
+	public FileInputStream getAvatar(User user) throws FileNotFoundException;
 
 	/**
 	 * Saves user's avatar
@@ -32,5 +32,5 @@ public interface ImageService {
 	 * @param user
 	 * @throws IOException
 	 */
-	public void saveAvatar(FileItem image, UserDTO user) throws IOException;
+	public void saveAvatar(FileItem image, User user) throws IOException;
 }

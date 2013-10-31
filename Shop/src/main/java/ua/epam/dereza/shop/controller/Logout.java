@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import ua.epam.dereza.shop.bean.User;
 import ua.epam.dereza.shop.core.Constants;
-import ua.epam.dereza.shop.db.dto.UserDTO;
 
 /**
  * Log out controller
@@ -28,7 +28,7 @@ public class Logout extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserDTO userDTO = (UserDTO) request.getSession().getAttribute(Constants.USER_BEAN);
+		User userDTO = (User) request.getSession().getAttribute(Constants.USER_BEAN);
 		request.getSession().invalidate();
 		String redirect = response.encodeRedirectURL(getServletContext().getContextPath());
 		if(log.isEnabledFor(Level.DEBUG))

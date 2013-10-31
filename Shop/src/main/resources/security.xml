@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:security xmlns:tns="http://ua.epam.dereza.shop/xml/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ua.epam.dereza.shop/xml/security security.xsd ">
+    <constraint>
+        <url-pattern>/account</url-pattern>
+        <role>admin</role>
+        <role>user</role>
+    </constraint>
+</tns:security>

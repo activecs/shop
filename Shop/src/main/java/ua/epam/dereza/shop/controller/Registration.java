@@ -21,14 +21,12 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import ua.epam.dereza.shop.bean.RegistrationForm;
+import ua.epam.dereza.shop.bean.User;
 import ua.epam.dereza.shop.core.Constants;
-import ua.epam.dereza.shop.db.dao.UserDAO;
-import ua.epam.dereza.shop.db.dto.UserDTO;
+import ua.epam.dereza.shop.db.dao.DAOException;
 import ua.epam.dereza.shop.service.CaptchaService;
 import ua.epam.dereza.shop.service.ImageService;
-import ua.epam.dereza.shop.service.ImageServiceImpl;
-import ua.epam.dereza.shop.service.RegistrationService;
-import ua.epam.dereza.shop.service.RegistrationServiceImpl;
+import ua.epam.dereza.shop.service.UserService;
 import ua.epam.dereza.shop.util.BeanTransformer;
 import ua.epam.dereza.shop.util.BeanValidator;
 import ua.epam.dereza.shop.util.ImageUtil;
@@ -46,7 +44,7 @@ public class Registration extends HttpServlet {
 	private static final Logger log = Logger.getLogger(Registration.class);
 
 	// services
-	private RegistrationService registrService;
+	private UserService userService;
 	private CaptchaService captchaService;
 	private ImageService imageService;
 
@@ -75,11 +73,11 @@ public class Registration extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		captchaService = (CaptchaService) config.getServletContext().getAttribute(Constants.CAPTCHA_SERVICE);
-		registrService = new RegistrationServiceImpl((UserDAO) config.getServletContext().getAttribute(Constants.USER_DAO));
-		externalResources = config.getServletContext().getInitParameter(Constants.EXTERNAL_RESOURCES);
 		encoding = config.getServletContext().getInitParameter(Constants.ENCODING);
-		imageService = new ImageServiceImpl(externalResources);
+
+		captchaService = (CaptchaService) config.getServletContext().getAttribute(Constants.CAPTCHA_SERVICE);
+		userService = (UserService)config.getServletContext().getAttribute(Constants.SERVICE_USER);
+		imageService = (ImageService)config.getServletContext().getAttribute(Constants.SERVICE_IMAGE);
 
 	}
 
@@ -95,7 +93,7 @@ public class Registration extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
-		UserDTO newUser = null;
+		User newUser = null;
 		RegistrationForm formBean = new RegistrationForm();
 		List<String> errors = new ArrayList<String>();
 		List<FileItem> avatarContainer = new ArrayList<>();
@@ -128,16 +126,20 @@ public class Registration extends HttpServlet {
 		errors.addAll(BeanValidator.validate(formBean));
 
 		// saves new client
-		if (errors.isEmpty()) {
-			newUser = BeanTransformer.transform(formBean);
-			if(!registrService.existCurrentUser(newUser.getEmail())){
-				imageService.saveAvatar(avatarContainer.get(0), newUser);
-				registrService.saveUser(newUser);
-			}else{
-				errors.add("User with given email already exist");
+		try{
+			if (errors.isEmpty()) {
+				newUser = BeanTransformer.transform(formBean);
+				if(!userService.isExistUser(newUser.getEmail())){
+					// sets default role
+					newUser.setRole(User.Role.USER);
+					imageService.saveAvatar(avatarContainer.get(0), newUser);
+					userService.addUser(newUser);
+				}else
+					errors.add("User with given email already exist");
 			}
+		}catch(DAOException e){
+			throw new ServletException(e);
 		}
-
 		// forward to registration page with determined errors
 		if (!errors.isEmpty()) {
 			forwardBack(request, response, formBean, errors);
@@ -291,8 +293,8 @@ public class Registration extends HttpServlet {
 			String captchaKeyword = captchaService.generateKeyword();
 			captchaService.attachCaptcha(captchaKeyword, request, response);
 		}
-		request.setAttribute("errors", errors);
-		request.setAttribute("formBean", formBean);
+		request.setAttribute(Constants.FORM_ERRORS, errors);
+		request.setAttribute(Constants.FORM_BEAN, formBean);
 		if (log.isEnabledFor(Level.DEBUG))
 			log.debug("Were found errors in user's info :" + errors);
 
