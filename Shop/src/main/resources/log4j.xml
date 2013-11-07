@@ -15,7 +15,7 @@
 	<!--file appender configuration -->
 	<appender name="file" class="org.apache.log4j.RollingFileAppender">
 		<param name="Threshold" value="INFO"/>
-		<param name="File" value="C:\\logs\\Shop.log" />
+		<param name="File" value="${catalina.home}\\logs\\dereza_shop.log" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="5" />
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
@@ -24,7 +24,7 @@
 	</appender>
 	
 	<root>
-		<priority value="ALL"></priority>
+		<priority value="TRACE"></priority>
 		<appender-ref ref="console" />
 		<appender-ref ref="file" />
 	</root>

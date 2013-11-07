@@ -6,10 +6,8 @@
 		<div class="span6">
 			<div class="pull-right">
 				<shop:locale />
-				<a href="#"><span>&pound;</span></a>
 				<span class="btn btn-mini">$155.00</span> 
-				<a href="product_summary.html"><span class="">$</span></a> 
-				<a href="product_summary.html">
+				<a href="#basket">
 					<span class="btn btn-mini btn-primary"> <i class="icon-shopping-cart icon-white"></i> [ 3 ] Itemes in your cart </span> 
 				</a>
 			</div>
@@ -25,23 +23,11 @@
 		<div class="navbar-inner">
 			<a class="brand" href="<c:url value='/' />">
 				<img src="<c:url value='/resources/images/logo.png'/>" alt="Netshop" /></a>
-			<form class="form-inline navbar-search" method="post" action="#">
-				<input id="srchFld" class="srchTxt" type="text" /> 
-				<select	class="srchTxt">
-					<option>All</option>
-					<option>CLOTHES</option>
-					<option>FOOD AND BEVERAGES</option>
-					<option>HEALTH & BEAUTY</option>
-					<option>SPORTS & LEISURE</option>
-					<option>BOOKS & ENTERTAINMENTS</option>
-				</select>
-				<button type="submit" id="submitButton" class="btn btn-primary">Go</button>
-			</form>
-
+			
 			<!-- top menu -->
 			<ul id="topMenu" class="nav pull-right">
-				<li class=""><a href="special_offer.html">Specials Offer</a></li>
-				<li class=""><a href="delivery.html">Delivery</a></li>
+				<li class=""><a href="#">Specials Offer</a></li>
+				<li class=""><a href="#">Delivery</a></li>
 				<li class=""><a href="<c:url value='/contact' /> ">Contact</a></li>
 				<!-- login link (in future it will become modal window) -->
 				<li class=""><shop:loginLogout /></li>

@@ -16,5 +16,14 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	
+	<tag>
+		<name>paginationUrl</name>
+		<tag-class>ua.epam.dereza.shop.tag.PaginationUrl</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>page</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 </taglib>

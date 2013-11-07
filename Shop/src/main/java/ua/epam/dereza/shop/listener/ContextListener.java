@@ -16,6 +16,8 @@ import ua.epam.dereza.shop.service.CaptchaServiceHidden;
 import ua.epam.dereza.shop.service.CaptchaServiceSession;
 import ua.epam.dereza.shop.service.ImageService;
 import ua.epam.dereza.shop.service.ImageServiceImpl;
+import ua.epam.dereza.shop.service.ProductService;
+import ua.epam.dereza.shop.service.ProductServiceImpl;
 import ua.epam.dereza.shop.service.UserService;
 import ua.epam.dereza.shop.service.UserServiceImpl;
 
@@ -62,6 +64,10 @@ public class ContextListener implements ServletContextListener {
 		String externalResources = context.getInitParameter(Constants.EXTERNAL_RESOURCES);
 		ImageService imageService = new ImageServiceImpl(externalResources);
 		context.setAttribute(Constants.SERVICE_IMAGE, imageService);
+
+		// productService
+		ProductService productService  = new ProductServiceImpl(daoFactory);
+		context.setAttribute(Constants.SERVICE_PRODUCT, productService);
 	}
 
 	/**
@@ -74,27 +80,19 @@ public class ContextListener implements ServletContextListener {
 		String captchaMode = context.getInitParameter(Constants.CAPTCHA_MODE);
 		Integer captchaLifetime = Integer.valueOf(context.getInitParameter(Constants.CAPTCHA_LIFETIME));
 		switch (captchaMode) {
-		case Constants.CAPTCHA_MODE_SESSION: {
-			context.setAttribute(Constants.CAPTCHA_SERVICE,
-					new CaptchaServiceSession(captchaLifetime));
+		case Constants.CAPTCHA_MODE_SESSION:
+			context.setAttribute(Constants.CAPTCHA_SERVICE, new CaptchaServiceSession(captchaLifetime));
 			break;
-		}
-		case Constants.CAPTCHA_MODE_COOKIE: {
-			context.setAttribute(Constants.CAPTCHA_SERVICE,
-					new CaptchaServiceCookie(captchaLifetime));
+		case Constants.CAPTCHA_MODE_COOKIE:
+			context.setAttribute(Constants.CAPTCHA_SERVICE,	new CaptchaServiceCookie(captchaLifetime));
 			break;
-		}
-		case Constants.CAPTCHA_MODE_HIDDEN: {
-			context.setAttribute(Constants.CAPTCHA_SERVICE,
-					new CaptchaServiceHidden(captchaLifetime));
+		case Constants.CAPTCHA_MODE_HIDDEN:
+			context.setAttribute(Constants.CAPTCHA_SERVICE, new CaptchaServiceHidden(captchaLifetime));
 			break;
-		}
-		default: {
+		default:
 			if (log.isEnabledFor(Level.WARN))
 				log.warn("Cannot determine necesary captchaMode-> will be chosen sessionMode");
-			context.setAttribute(Constants.CAPTCHA_SERVICE,
-					new CaptchaServiceSession(captchaLifetime));
-		}
+			context.setAttribute(Constants.CAPTCHA_SERVICE,	new CaptchaServiceSession(captchaLifetime));
 		}
 		log.debug("Selected captchaMode ->"
 				+ context.getAttribute(Constants.CAPTCHA_SERVICE).getClass()

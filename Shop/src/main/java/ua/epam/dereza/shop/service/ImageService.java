@@ -33,4 +33,13 @@ public interface ImageService {
 	 * @throws IOException
 	 */
 	public void saveAvatar(FileItem image, User user) throws IOException;
+
+	/**
+	 * Return product's image
+	 * 
+	 * @param photoName
+	 * @return stream of image
+	 * @throws FileNotFoundException
+	 */
+	public FileInputStream getProductPhoto(String photoName) throws FileNotFoundException;
 }

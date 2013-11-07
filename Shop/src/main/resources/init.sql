@@ -4,7 +4,7 @@ USE derezashop;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS manufacturer;
-DROP TABLE IF EXISTS categorie;
+DROP TABLE IF EXISTS category;
 
 CREATE TABLE user(
     	id             		INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -31,7 +31,7 @@ CREATE TABLE manufacturer(
 		id             		INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		name          		VARCHAR(40));
 
-CREATE TABLE categorie(
+CREATE TABLE category(
 		id            		INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		name           		VARCHAR(40));
 
@@ -44,5 +44,5 @@ CREATE TABLE product(
 		manufacturer_id		INTEGER NOT NULL,
 		category_id			INTEGER NOT NULL,
 		FOREIGN KEY (manufacturer_id) REFERENCES manufacturer (id) ON UPDATE RESTRICT ON DELETE CASCADE,
-		FOREIGN KEY (category_id) REFERENCES categorie (id) ON UPDATE RESTRICT ON DELETE CASCADE,
+		FOREIGN KEY (category_id) REFERENCES category (id) ON UPDATE RESTRICT ON DELETE CASCADE,
 		CHECK(price>0));

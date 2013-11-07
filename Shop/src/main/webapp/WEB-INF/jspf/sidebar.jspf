@@ -1,27 +1,21 @@
 <div id="sidebar" class="span3">
 	<div class="well well-small">
-		<a id="myCart" href="product_summary.html"> <img src="<c:url value='/resources/images/ico-cart.png' />" alt="cart">3
-			Items in your cart <span class="badge badge-warning pull-right">$155.00</span>
+		<a id="myCart" href="#basket"> 
+			<img src="<c:url value='/resources/images/ico-cart.png' />" alt="cart">3 Items in your cart <span class="badge badge-warning pull-right">$155.00</span>
 		</a>
 	</div>
 	<ul id="sideManu" class="nav nav-tabs nav-stacked">
-		<li class="subMenu open"><a> ELECTRONICS [230]</a>
+		<li class="subMenu open"><a> ELECTRONICS </a>
 			<ul>
-				<li><a class="active" href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Cameras (100) </a></li>
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Computers, Tablets & laptop (30)</a></li>
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Mobile Phone (80)</a></li>
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Sound & Vision (15)</a></li>
+				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i> All electronics </a></li>
+				<li><a class="active" href="<c:url value='/products?category=wireless+access+point' />"><i class="icon-chevron-right"></i>Wireless access point</a></li>
+				<li><a href="<c:url value='/products?category=wireless+router' />"><i class="icon-chevron-right"></i>Wireless router</a></li>
+				<li><a href="<c:url value='/products?category=wi-fi+adapter' />"><i class="icon-chevron-right"></i>Wi-Fi adapter</a></li>
 			</ul>
 		</li>
-		<li class="subMenu"><a> CLOTHES [840] </a>
+		<li class="subMenu"><a> SOMETHING </a>
 			<ul style="display: none">
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Women's Clothing (45)</a></li>
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Women's Shoes (8)</a></li>
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Women's Hand Bags (5)</a></li>
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Men's Clothings (45)</a></li>
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Men's Shoes (6)</a></li>
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Kids Clothing (5)</a></li>
-				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i>Kids Shoes (3)</a></li>
+				<li><a href="<c:url value='/products' />"><i class="icon-chevron-right"></i> Products </a></li>
 			</ul>
 		</li>
 	</ul><br />

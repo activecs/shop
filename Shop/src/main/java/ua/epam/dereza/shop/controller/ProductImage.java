@@ -11,26 +11,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
-
-import ua.epam.dereza.shop.bean.User;
 import ua.epam.dereza.shop.core.Constants;
 import ua.epam.dereza.shop.service.ImageService;
 import ua.epam.dereza.shop.service.ImageServiceImpl;
 
 /**
- * Allows you to access to external resources(such as avatars)
+ * Allow you to get product's photo
  * 
  * @author Eduard_Dereza
  *
  */
-@WebServlet("/avatar.png")
-public class Avatar extends HttpServlet {
+@WebServlet("/product/*")
+public class ProductImage extends HttpServlet {
 
-	private static final long serialVersionUID = 1741249551192887320L;
-	private static final Logger log = Logger.getLogger(Avatar.class);
+	private static final long serialVersionUID = -7053307835486728328L;
 	private ImageService imageService;
 	private String externalResources;
 
@@ -43,22 +38,18 @@ public class Avatar extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		User userBean = (User) session.getAttribute(Constants.BEAN_USER);
-		if(userBean == null){
-			response.sendError(404);
-			log.warn("Cannot find avatar because userBean == null");
-			return;
-		}
+		String pathInfo = request.getPathInfo();
+		String imageName = pathInfo;
 
-		FileInputStream avatarInput = imageService.getAvatar(userBean);
+		FileInputStream imageInput = imageService.getProductPhoto(imageName);
 		OutputStream respOut = response.getOutputStream();
 		byte s[] = new byte[100];
 		int byteCount = 0;
-		while ((byteCount = (avatarInput.read(s))) != -1)
+		while ((byteCount = (imageInput.read(s))) != -1)
 			respOut.write(Arrays.copyOfRange(s, 0, byteCount));
 		respOut.flush();
 		respOut.close();
-		avatarInput.close();
+		imageInput.close();
 	}
+
 }

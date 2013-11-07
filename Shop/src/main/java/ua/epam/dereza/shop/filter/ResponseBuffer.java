@@ -77,8 +77,7 @@ public class ResponseBuffer extends HttpServletResponseWrapper {
 			throw new IllegalStateException();
 
 		if (pw == null) {
-			pw = new PrintWriter(new OutputStreamWriter(internalBuffer,
-					getResponse().getCharacterEncoding()), true);
+			pw = new PrintWriter(new OutputStreamWriter(internalBuffer,	getResponse().getCharacterEncoding()), true);
 		}
 
 		return pw;

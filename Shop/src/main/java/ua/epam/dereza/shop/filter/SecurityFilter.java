@@ -55,7 +55,7 @@ public class SecurityFilter implements Filter {
 
 		SecurityRule actualRule = findRuleForUrI(request);
 		if(actualRule != null){
-			User userBean = (User) request.getSession().getAttribute(Constants.USER_BEAN);
+			User userBean = (User) request.getSession().getAttribute(Constants.BEAN_USER);
 			if (userBean == null) {
 				RequestDispatcher dispatcher = request.getRequestDispatcher(Constants.PAGE_LOGIN);
 				dispatcher.forward(request, response);

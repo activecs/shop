@@ -89,7 +89,7 @@ public class SecurityFilterBasicTest {
 		doReturn("/admin/managment").when(request).getRequestURI();
 		User user = new User();
 		user.setRole(User.Role.USER);
-		doReturn(user).when(session).getAttribute(Constants.USER_BEAN);
+		doReturn(user).when(session).getAttribute(Constants.BEAN_USER);
 
 		filter.doFilter(request, response, chain);
 		verify(response).sendError(eq(403));
@@ -110,7 +110,7 @@ public class SecurityFilterBasicTest {
 		doReturn("/account").when(request).getRequestURI();
 		User user = new User();
 		user.setRole(User.Role.USER);
-		doReturn(user).when(session).getAttribute(Constants.USER_BEAN);
+		doReturn(user).when(session).getAttribute(Constants.BEAN_USER);
 
 		filter.doFilter(request, response, chain);
 		verify(chain).doFilter(any(ServletRequest.class),
@@ -122,7 +122,7 @@ public class SecurityFilterBasicTest {
 		doReturn("/notprotected").when(request).getRequestURI();
 		User user = new User();
 		user.setRole(User.Role.USER);
-		doReturn(user).when(session).getAttribute(Constants.USER_BEAN);
+		doReturn(user).when(session).getAttribute(Constants.BEAN_USER);
 
 		filter.doFilter(request, response, chain);
 		verify(chain).doFilter(any(ServletRequest.class),any(ServletResponse.class));

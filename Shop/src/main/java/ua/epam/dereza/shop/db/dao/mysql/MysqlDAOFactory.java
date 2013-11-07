@@ -2,7 +2,10 @@ package ua.epam.dereza.shop.db.dao.mysql;
 
 import org.apache.log4j.Logger;
 
+import ua.epam.dereza.shop.db.dao.CategoryDAO;
 import ua.epam.dereza.shop.db.dao.DAOFactory;
+import ua.epam.dereza.shop.db.dao.ManufacturerDAO;
+import ua.epam.dereza.shop.db.dao.ProductDAO;
 import ua.epam.dereza.shop.db.dao.UserDAO;
 
 /**
@@ -18,6 +21,21 @@ public class MysqlDAOFactory implements DAOFactory{
 	@Override
 	public UserDAO getUserDAO() {
 		return new MysqlUserDAO();
+	}
+
+	@Override
+	public ProductDAO getProductDAO() {
+		return new MysqlProductDAO();
+	}
+
+	@Override
+	public ManufacturerDAO getManufacturerDAO() {
+		return new MysqlManufacturerDAO();
+	}
+
+	@Override
+	public CategoryDAO getCategoryDAO() {
+		return new MysqlCategoryDAO();
 	}
 
 }

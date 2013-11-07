@@ -2,14 +2,20 @@ package ua.epam.dereza.shop.service;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.Properties;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -33,14 +39,54 @@ public class UserServiceIntegrationTest {
 	User testUser;
 	String notEncodedUserPassword = "user1";
 
-	private Connection getConnection() throws ClassNotFoundException,
-	SQLException {
+	@BeforeClass
+	public static void createTestDb() throws IOException, ClassNotFoundException, SQLException{
+		BufferedReader reader = new BufferedReader(new InputStreamReader(new Object().getClass().getResourceAsStream("/initTestDB.sql")));
+		StringBuilder query = new StringBuilder();
+		while(reader.ready()){
+			query.append(reader.readLine());
+		}
+		Connection conn = getBaseConnection();
+		String queries[] = query.toString().split(";");
+		Statement stm = conn.createStatement();
+		for(String tempQuery : queries){
+			stm.addBatch(tempQuery);
+		}
+		stm.executeBatch();
+		conn.commit();
+		stm.close();
+		stm.close();
+	}
+
+	@AfterClass
+	public static void removeTestDb() throws ClassNotFoundException, SQLException{
+		Connection conn = getBaseConnection();
+		Statement stm = conn.createStatement();
+		stm.executeUpdate("DROP DATABASE testbase;");
+		conn.commit();
+		stm.close();
+		conn.close();
+	}
+
+	private static Connection getBaseConnection() throws ClassNotFoundException, SQLException {
 		String driverName = "com.mysql.jdbc.Driver";
-		String connectionUrl = "jdbc:mysql://localhost:3306/derezashop";
+		String connectionUrl = "jdbc:mysql://epuakhaw0162:3306/";
 		Class.forName(driverName);
 		Properties prop = new Properties();
 		prop.put("user", "root");
-		prop.put("password", "root");
+		prop.put("password", "root123");
+		Connection con = DriverManager.getConnection(connectionUrl, prop);
+		con.setAutoCommit(false);
+		return con;
+	}
+
+	private Connection getConnection() throws ClassNotFoundException, SQLException {
+		String driverName = "com.mysql.jdbc.Driver";
+		String connectionUrl = "jdbc:mysql://epuakhaw0162:3306/testbase";
+		Class.forName(driverName);
+		Properties prop = new Properties();
+		prop.put("user", "root");
+		prop.put("password", "root123");
 		Connection con = DriverManager.getConnection(connectionUrl, prop);
 		con.setAutoCommit(false);
 		return con;

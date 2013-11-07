@@ -2,14 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ua.kharkiv.dereza</groupId>
-	<artifactId>Shop</artifactId>
+	<artifactId>derezashop</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Shop Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<build.name>Shop</build.name>
+		<build.name>derezashop</build.name>
 		<org.apache.tomcat.version>7.0.42</org.apache.tomcat.version>
 		<org.apache.tomcat.maven.version>2.1</org.apache.tomcat.maven.version>
 		<log4j.version>1.2.17</log4j.version>
@@ -23,9 +23,17 @@
 		<maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
 		<maven.buildhelper.plugin>1.8</maven.buildhelper.plugin>
 		<mysql.connector.version>5.1.26</mysql.connector.version>
+		<com.google.code.gson.version>2.2.4</com.google.code.gson.version>
 	</properties>
 
 	<dependencies>
+		<!-- gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${com.google.code.gson.version}</version>
+		</dependency>
+
 
 		<!-- mysql connector -->
 		<dependency>
@@ -55,7 +63,7 @@
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-jsp-api</artifactId>
 			<version>${org.apache.tomcat.version}</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- mockito -->
@@ -96,6 +104,28 @@
 			<version>${log4j.version}</version>
 		</dependency>
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>external</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.tomcat.maven</groupId>
+						<artifactId>tomcat7-maven-plugin</artifactId>
+						<version>${org.apache.tomcat.maven.version}</version>
+						<configuration>
+							<url>http://epuakhaw0162:8080/manager/text</url>
+							<username>tomcat</username>
+							<password>tomcat</password>
+							<charset>utf-8</charset>
+							<update>true</update>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<build>
 		<finalName>${build.name}</finalName>
@@ -139,7 +169,7 @@
 				<version>${maven.resources.plugin.version}</version>
 				<configuration>
 					<encoding>utf-8</encoding>
-					
+
 				</configuration>
 			</plugin>
 

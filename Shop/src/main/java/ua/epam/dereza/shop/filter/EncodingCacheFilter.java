@@ -45,7 +45,6 @@ public class EncodingCacheFilter implements Filter {
 		response.setHeader("cache-response-directive", "no-cache");
 
 		chain.doFilter(request, response);
-
 	}
 
 }

@@ -53,7 +53,7 @@ public class FooterFilter implements Filter {
 		if (contentTypeText(wrappedResp)) {
 			// page generation time
 			long delay = finishTime - startTime;
-			content = doModification(wrappedResp, delay);
+			content = doModification(wrappedResp, delay, response.getCharacterEncoding());
 		}
 		ServletOutputStream out = response.getOutputStream();
 		out.write(content);
@@ -83,20 +83,19 @@ public class FooterFilter implements Filter {
 	 * @return modificated bytes from wrapped response
 	 * @throws IOException
 	 */
-	private byte[] doModification(ResponseBuffer wrappedResp, long delay) throws IOException {
+	private byte[] doModification(ResponseBuffer wrappedResp, long delay, String encoding) throws IOException {
 		final String RED_FOOTER_WITH_DELAY = "<footer style=\"background-color:#FF0000;\"> <p>Generation time = " + delay + " ms</p>";
 		final String FOOTER_WITH_DELAY ="<footer> <p>Generation time = " + delay + " ms</p>";
 
 		byte[] content = wrappedResp.getBytes();
-		String contentStr = new String(content,	wrappedResp.getCharacterEncoding());
+		String contentStr = new String(content, encoding);
 		if (delay > MAX_DELAY) {
 			contentStr = contentStr.replace("<footer>",	RED_FOOTER_WITH_DELAY);
 		} else {
 			contentStr = contentStr.replace("<footer>", FOOTER_WITH_DELAY);
 		}
-		content = contentStr.getBytes();
+		content = contentStr.getBytes(encoding);
 
 		return content;
 	}
-
 }

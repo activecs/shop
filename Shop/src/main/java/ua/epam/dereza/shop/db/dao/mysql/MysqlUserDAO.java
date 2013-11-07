@@ -15,10 +15,19 @@ import ua.epam.dereza.shop.bean.User;
 import ua.epam.dereza.shop.db.dao.DAOException;
 import ua.epam.dereza.shop.db.dao.UserDAO;
 
+/**
+ * UserDAO for mysql
+ * 
+ * @author Eduard_Dereza
+ *
+ */
 public class MysqlUserDAO implements UserDAO {
 
 	private static final Logger log = Logger.getLogger(MysqlUserDAO.class);
 
+	// ---------------------------------------------
+	// SQL queries
+	// ---------------------------------------------
 	private static final String SQL_FIND_USER_BY_EMAIL = "SELECT id,email,password,avatar,firstName,lastName,birthDate,company,address1,address2,city,postcode,additionalInfo,phone,role,enabled,loginAttemptCount,lastSuccessLogin,nextUnban FROM user WHERE email=?;";
 	private static final String SQL_FIND_ALL_USERS = "SELECT users.id,email,password,avatar,firstName,lastName,birthDate,company,address1,address2,city,postcode,additionalInfo,phone,role,enabled,loginAttemptCount,lastSuccessLogin,nextUnban FROM user;";
 	private static final String SQL_UPDATE_USER_INFO = "UPDATE user SET role=?, password=?, avatar=?,firstName=?,lastName=?,birthDate=?,company=?,address1=?,address2=?,city=?,postcode=?,additionalInfo=?,phone=?,enabled=?,loginAttemptCount=?,lastSuccessLogin=?,nextUnban=? WHERE email=?;";
@@ -27,13 +36,10 @@ public class MysqlUserDAO implements UserDAO {
 	private static final String SQL_REMOVE_USER_WITH_GIVEN_EMAIL = "DELETE FROM user WHERE email=?";
 
 	@Override
-	public User findUserByEmail(Connection conn, String email)
-			throws DAOException {
-		try {
+	public User findUserByEmail(Connection conn, String email) throws DAOException {
+		try (PreparedStatement pstmt = conn.prepareStatement(SQL_FIND_USER_BY_EMAIL)){
 			User user = null;
-			PreparedStatement pstmt = null;
 			ResultSet rs = null;
-			pstmt = conn.prepareStatement(SQL_FIND_USER_BY_EMAIL);
 			pstmt.setString(1, email);
 			rs = pstmt.executeQuery();
 			if (rs.next())
@@ -48,12 +54,10 @@ public class MysqlUserDAO implements UserDAO {
 
 	@Override
 	public List<User> findAll(Connection conn) throws DAOException {
-		try {
+		try (Statement stmt = conn.createStatement()){
 			List<User> users = new ArrayList<>();
 			User user = null;
-			Statement stmt = null;
 			ResultSet rs = null;
-			stmt = conn.createStatement();
 			rs = stmt.executeQuery(SQL_FIND_ALL_USERS);
 			while (rs.next()) {
 				user = extractUserDTO(rs);
@@ -69,9 +73,7 @@ public class MysqlUserDAO implements UserDAO {
 
 	@Override
 	public void saveUser(Connection conn, User user) throws DAOException {
-		try {
-			PreparedStatement pstmt = null;
-			pstmt = conn.prepareStatement(SQL_CREATE_NEW_USER);
+		try (PreparedStatement pstmt = conn.prepareStatement(SQL_CREATE_NEW_USER)){
 			packUserDTO(pstmt, user);
 			pstmt.setString(14, user.getEmail());
 			pstmt.executeUpdate();
@@ -85,9 +87,7 @@ public class MysqlUserDAO implements UserDAO {
 
 	@Override
 	public void updateUser(Connection conn, User user) throws DAOException {
-		try {
-			PreparedStatement pstmt = null;
-			pstmt = conn.prepareStatement(SQL_UPDATE_USER_INFO);
+		try (PreparedStatement pstmt = conn.prepareStatement(SQL_UPDATE_USER_INFO)){
 			packUserDTO(pstmt, user);
 			pstmt.setBoolean(14, user.getEnabled());
 			pstmt.setInt(15, user.getLoginAttemptCount());
@@ -106,9 +106,7 @@ public class MysqlUserDAO implements UserDAO {
 
 	@Override
 	public void removeUser(Connection conn, String email) throws DAOException {
-		try {
-			PreparedStatement pstmt = null;
-			pstmt = conn.prepareStatement(SQL_REMOVE_USER_WITH_GIVEN_EMAIL);
+		try (PreparedStatement pstmt = conn.prepareStatement(SQL_REMOVE_USER_WITH_GIVEN_EMAIL)){
 			pstmt.setString(1, email);
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -142,8 +140,7 @@ public class MysqlUserDAO implements UserDAO {
 		return user;
 	}
 
-	private PreparedStatement packUserDTO(PreparedStatement pstmt, User user)
-			throws SQLException {
+	private PreparedStatement packUserDTO(PreparedStatement pstmt, User user) throws SQLException {
 		pstmt.setString(1, user.getRole().toString());
 		pstmt.setString(2, user.getPassword());
 		pstmt.setString(3, user.getAvatar());

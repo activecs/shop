@@ -20,15 +20,16 @@ import ua.epam.dereza.shop.util.ImageUtil;
  */
 public class ImageServiceImpl implements ImageService {
 
-	private String baseDir;
 	private String avatarDir;
+	private String productDir;
 	private static final String AVATAR_EXTENTION = "png";
 	private static final String AVATAR_DEFAULT = "default.png";
+	private static final String PRODUCT_PHOTO_DEFAULT = "default.jpg";
 	private static final int AVATAR_MAX_WIDTH = 400;
 
 	public ImageServiceImpl(String baseDir) {
-		this.baseDir = baseDir;
-		avatarDir = this.baseDir + "avatar\\";
+		avatarDir = baseDir + "avatar" + File.separator;
+		productDir = baseDir + "product" + File.separator;
 	}
 
 	@Override
@@ -60,6 +61,17 @@ public class ImageServiceImpl implements ImageService {
 		ImageUtil.writeImageTo(avatarOut, bufImage, AVATAR_EXTENTION);
 	}
 
+	@Override
+	public FileInputStream getProductPhoto(String productName) throws FileNotFoundException{
+		File product = new File(productDir + productName);
+		product.mkdirs();
+		FileInputStream stream;
 
+		if (product.isDirectory() || !product.exists()) {
+			product = new File(productDir + PRODUCT_PHOTO_DEFAULT);
+		}
+		stream = new FileInputStream(product);
 
+		return stream;
+	}
 }

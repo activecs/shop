@@ -5,7 +5,7 @@ SET SQL_SAFE_UPDATES=0;
 DELETE FROM user;
 DELETE FROM product;
 DELETE FROM manufacturer;
-DELETE FROM categorie;
+DELETE FROM category;
           
 INSERT INTO user(email,password,avatar,firstName,lastName,birthDate,address1,address2,city,postcode,additionalInfo,phone,role)
 	VALUES("user1@yandex.ru","24c9e15e52afc47c225b757e7bee1f9d","user1@yandex.ru.png","Eduard","Dereza","1983-05-26","Kharkiv city","Pushkinskaya str", "Kharkiv",61024,"When you need more functionality, something beyond what you can get with the standard actions or EL, you don’t have to resort to scripting. In the next chapter, you’ll learn how to use the JSP Standard Tag Library 1.1 (JSTL 1.1) to do just about everything you’ll ever need, using a combination of tags and EL. Here’s a sneak peek of how to do our conditional forward without scripting.","0930238984", 'USER');
@@ -17,10 +17,10 @@ INSERT INTO manufacturer(name)
 			("Zyxel"),
 			("Edimax");
 
-INSERT INTO categorie(name)
+INSERT INTO category(name)
 		VALUES("wireless access point"),
 				("wireless router"),
-				("wi-fi adapters");
+				("wi-fi adapter");
 
 INSERT INTO product(name,price,photo,manufacturer_id,category_id,description)
 		VALUES("RT-N14U", 367,  "asus_rt_n14u.jpg", 1, 2, "WAN-порт	Ethernet; Интерфейсы	4 x RJ-45 100 Мбит/с;  1 x RJ-45 100 Мбит/с (WAN); USB 2.0; Беспроводные возможности	IEEE 802.11n; Поддержка протоколов	PPPoE, IPsec, L2TP, PPTP; Частота работы Wi-Fi	2.4 ГГц; Поддержка IPTV; Количество антенн	2; Конструкция антенн	Встроенные"),

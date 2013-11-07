@@ -15,13 +15,22 @@ public final class Constants {
 	public static final String PAGE_CONTACT = "/WEB-INF/pages/contact.jsp";
 	public static final String PAGE_ACCOUNT = "/WEB-INF/pages/account.jsp";
 	public static final String PAGE_PRODUCTS = "/WEB-INF/pages/products.jsp";
-	
+	public static final String PAGE_PRODUCTS_DETAIL = "/WEB-INF/pages/product_detail.jsp";
+
 	public static final String FORM_ERRORS = "errors";
 	public static final String FORM_BEAN = "formBean";
-	
+	public static final String BEAN_USER = "userBean";
+	public static final String BEAN_PRODUCTS = "products";
+	public static final String BEAN_PRODUCT = "product";
+	public static final String BEAN_MANUFACTURERS = "manufacturers";
+	public static final String BEAN_CATEGORIES = "categories";
+	public static final String BEAN_PAGE_AMOUNT = "pageAmount";
+
+
 	// service
 	public static final String SERVICE_USER = "userService";
 	public static final String SERVICE_IMAGE = "imageService";
+	public static final String SERVICE_PRODUCT = "productService";
 
 	public static final String DAO_FACTORY = "daoFactory";
 
@@ -32,8 +41,6 @@ public final class Constants {
 	public static final String  CAPTCHA_MODE_HIDDEN = "hiddenField";
 	public static final String  CAPTCHA_SERVICE = "captchaService";
 	public static final String 	CAPTCHA_ID = "captchaID";
-
-	public static final String USER_BEAN = "userBean";
 
 	// http header
 	public static final String HEADER_REFERER = "referer";
