@@ -146,7 +146,7 @@ public class Registration extends HttpServlet {
 		} else {
 			// redirect to main page
 			String redirect = null;
-			request.getSession().setAttribute(Constants.USER_BEAN, newUser);
+			request.getSession().setAttribute(Constants.BEAN_USER, newUser);
 			redirect = response.encodeRedirectURL(getServletContext().getContextPath());
 			response.sendRedirect(redirect);
 		}
@@ -293,7 +293,7 @@ public class Registration extends HttpServlet {
 			String captchaKeyword = captchaService.generateKeyword();
 			captchaService.attachCaptcha(captchaKeyword, request, response);
 		}
-		request.setAttribute(Constants.FORM_ERRORS, errors);
+		request.setAttribute(Constants.BEAN_ERRORS, errors);
 		request.setAttribute(Constants.FORM_BEAN, formBean);
 		if (log.isEnabledFor(Level.DEBUG))
 			log.debug("Were found errors in user's info :" + errors);

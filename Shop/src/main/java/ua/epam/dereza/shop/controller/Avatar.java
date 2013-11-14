@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 import ua.epam.dereza.shop.bean.User;
 import ua.epam.dereza.shop.core.Constants;
 import ua.epam.dereza.shop.service.ImageService;
-import ua.epam.dereza.shop.service.ImageServiceImpl;
 
 /**
  * Allows you to access to external resources(such as avatars)
@@ -32,13 +31,11 @@ public class Avatar extends HttpServlet {
 	private static final long serialVersionUID = 1741249551192887320L;
 	private static final Logger log = Logger.getLogger(Avatar.class);
 	private ImageService imageService;
-	private String externalResources;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		externalResources = config.getServletContext().getInitParameter(Constants.EXTERNAL_RESOURCES);
-		imageService = new ImageServiceImpl(externalResources);
+		imageService = (ImageService) config.getServletContext().getAttribute(Constants.SERVICE_IMAGE);
 	}
 
 	@Override
@@ -53,7 +50,7 @@ public class Avatar extends HttpServlet {
 
 		FileInputStream avatarInput = imageService.getAvatar(userBean);
 		OutputStream respOut = response.getOutputStream();
-		byte s[] = new byte[100];
+		byte s[] = new byte[4096];
 		int byteCount = 0;
 		while ((byteCount = (avatarInput.read(s))) != -1)
 			respOut.write(Arrays.copyOfRange(s, 0, byteCount));

@@ -45,7 +45,7 @@
 									<input type="text" name="lastName" id="lastName" placeholder="Last Name" value="${formBean.lastName}" />
 								</div>
 							</div>
-							<div class="control-group">
+							<div id="emailControlGroup" class="control-group">
 								<label class="control-label" for="inputEmail">Email <sup>*</sup></label>
 								<div class="controls">
 									<input type="text" name="inputEmail" id="inputEmail" placeholder="Email" value="${formBean.email}" />

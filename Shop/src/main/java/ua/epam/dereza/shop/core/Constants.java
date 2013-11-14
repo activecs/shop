@@ -16,21 +16,36 @@ public final class Constants {
 	public static final String PAGE_ACCOUNT = "/WEB-INF/pages/account.jsp";
 	public static final String PAGE_PRODUCTS = "/WEB-INF/pages/products.jsp";
 	public static final String PAGE_PRODUCTS_DETAIL = "/WEB-INF/pages/product_detail.jsp";
+	public static final String PAGE_BASKET = "/WEB-INF/pages/basket.jsp";
+	public static final String PAGE_REQUISITES = "/WEB-INF/pages/requisites.jsp";
+	public static final String PAGE_SUCCESS_ORDER = "/WEB-INF/pages/success_order.jsp";
 
-	public static final String FORM_ERRORS = "errors";
+	public static final String PATH_SUCCES_ORDER = "/successOrder";
+
 	public static final String FORM_BEAN = "formBean";
+	public static final String BEAN_ERRORS = "errors";
 	public static final String BEAN_USER = "userBean";
 	public static final String BEAN_PRODUCTS = "products";
 	public static final String BEAN_PRODUCT = "product";
 	public static final String BEAN_MANUFACTURERS = "manufacturers";
 	public static final String BEAN_CATEGORIES = "categories";
 	public static final String BEAN_PAGE_AMOUNT = "pageAmount";
+	public static final String BEAN_BASKET = "basket";
+	public static final String BEAN_PAYMENT_METHODS = "paymentMethods";
 
+	public static final String BEAN_BASKET_QUANTITY = "basketQuantity";
+	public static final String BEAN_BASKET_COST = "basketCost";
+	public static final String BEAN_BASKET_CONCRETE_PRODUCT_QUANTITY = "quantity";
+	public static final String BEAN_BASKET_CONCRETE_PRODUCT_PRICE = "price";
+
+	public static final String BEAN_ORDER = "order";
+	public static final String BEAN_ORDER_ID = "orderId";
 
 	// service
 	public static final String SERVICE_USER = "userService";
 	public static final String SERVICE_IMAGE = "imageService";
 	public static final String SERVICE_PRODUCT = "productService";
+	public static final String SERVICE_ORDER = "orderService";
 
 	public static final String DAO_FACTORY = "daoFactory";
 

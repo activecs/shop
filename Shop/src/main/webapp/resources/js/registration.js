@@ -22,6 +22,14 @@ $(window).load(function() {
 			todayHighlight : true
 		});
 	});
+	
+	 // send ajax query
+    $('#registration-form #inputEmail').bind("change keyup", function() {    		
+    	if(registration.validateEmail($(this).val())){        	
+    			ajaxJson.sendRequest();        		
+        }
+    });
+	
 });
 
 var registration = {
@@ -109,6 +117,10 @@ var registration = {
 								+ message + "</strong> \
 			</div>");
 	},
+	// removes all errors
+	removeErrors : function() {
+		$('#errors').empty();
+	},
 	// scroll to top
 	scrollToTop : function() {
 		$('html, body').animate({
@@ -127,4 +139,29 @@ var captcha = {
 		writeToHiddenField : function(){
 			$('#expectedCaptcha').val($.cookie(this.cookieName));
 		}
+};
+
+var ajaxJson = {
+	
+	URL : 'asyncRegistration',
+	
+	sendRequest : function() {
+		$.ajax({
+			type : 'GET',
+			cashe : false,
+			data: "email="+$('#registration-form #inputEmail').val(),
+			dataType : 'json',
+			url : ajaxJson.URL,
+			success : function(data) {
+				
+				registration.removeErrors();
+				$("#emailControlGroup").removeClass("error");
+				
+				if (data.code != 0) {
+					$("#emailControlGroup").addClass("error");
+					registration.appendError(data.message);
+				}
+			}
+		});
+	}
 };

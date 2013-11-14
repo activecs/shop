@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import ua.epam.dereza.shop.core.Constants;
 import ua.epam.dereza.shop.service.ImageService;
-import ua.epam.dereza.shop.service.ImageServiceImpl;
 
 /**
  * Allow you to get product's photo
@@ -27,13 +26,11 @@ public class ProductImage extends HttpServlet {
 
 	private static final long serialVersionUID = -7053307835486728328L;
 	private ImageService imageService;
-	private String externalResources;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		externalResources = config.getServletContext().getInitParameter(Constants.EXTERNAL_RESOURCES);
-		imageService = new ImageServiceImpl(externalResources);
+		imageService = (ImageService) config.getServletContext().getAttribute(Constants.SERVICE_IMAGE);
 	}
 
 	@Override
@@ -43,7 +40,7 @@ public class ProductImage extends HttpServlet {
 
 		FileInputStream imageInput = imageService.getProductPhoto(imageName);
 		OutputStream respOut = response.getOutputStream();
-		byte s[] = new byte[100];
+		byte s[] = new byte[4096];
 		int byteCount = 0;
 		while ((byteCount = (imageInput.read(s))) != -1)
 			respOut.write(Arrays.copyOfRange(s, 0, byteCount));

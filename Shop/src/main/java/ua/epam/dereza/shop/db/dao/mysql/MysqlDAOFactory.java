@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import ua.epam.dereza.shop.db.dao.CategoryDAO;
 import ua.epam.dereza.shop.db.dao.DAOFactory;
 import ua.epam.dereza.shop.db.dao.ManufacturerDAO;
+import ua.epam.dereza.shop.db.dao.OrderDAO;
 import ua.epam.dereza.shop.db.dao.ProductDAO;
 import ua.epam.dereza.shop.db.dao.UserDAO;
 
@@ -36,6 +37,11 @@ public class MysqlDAOFactory implements DAOFactory{
 	@Override
 	public CategoryDAO getCategoryDAO() {
 		return new MysqlCategoryDAO();
+	}
+
+	@Override
+	public OrderDAO getOrderDAO() {
+		return new MysqlOrderDAO();
 	}
 
 }

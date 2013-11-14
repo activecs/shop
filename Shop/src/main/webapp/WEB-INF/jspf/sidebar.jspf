@@ -1,7 +1,8 @@
 <div id="sidebar" class="span3">
 	<div class="well well-small">
-		<a id="myCart" href="#basket"> 
-			<img src="<c:url value='/resources/images/ico-cart.png' />" alt="cart">3 Items in your cart <span class="badge badge-warning pull-right">$155.00</span>
+		<a id="myCart" href="<c:url value='/basket' />">
+			<img src="<c:url value='/resources/images/ico-cart.png' />" alt="cart">
+			<shop:basketQuantity /> Items in your cart <span class="badge badge-warning pull-right"><shop:basketCost /></span>
 		</a>
 	</div>
 	<ul id="sideManu" class="nav nav-tabs nav-stacked">

@@ -52,13 +52,13 @@ public class Login extends HttpServlet {
 		 * contains previous authorization errors
 		 */
 		HttpSession session = request.getSession();
-		List<String> errors = (List<String>) session.getAttribute(Constants.FORM_ERRORS);
+		List<String> errors = (List<String>) session.getAttribute(Constants.BEAN_ERRORS);
 		LoginForm formBean = (LoginForm) session.getAttribute(Constants.FORM_BEAN);
 		if (errors != null && formBean != null) {
-			session.removeAttribute(Constants.FORM_ERRORS);
+			session.removeAttribute(Constants.BEAN_ERRORS);
 			session.removeAttribute(Constants.FORM_BEAN);
 
-			request.setAttribute(Constants.FORM_ERRORS, errors);
+			request.setAttribute(Constants.BEAN_ERRORS, errors);
 			request.setAttribute(Constants.FORM_BEAN, formBean);
 		}
 		request.getRequestDispatcher(Constants.PAGE_LOGIN).forward(request,
@@ -86,7 +86,7 @@ public class Login extends HttpServlet {
 			if (authState.equals(UserService.AuthState.OK)) {
 				userDTO = userService.findUserByEmail(formBean.getEmail());
 				log.info("Logged in ->" + userDTO);
-				request.getSession().setAttribute(Constants.USER_BEAN, userDTO);
+				request.getSession().setAttribute(Constants.BEAN_USER, userDTO);
 				
 				redirect = response.encodeRedirectURL(referer);
 				
@@ -102,7 +102,7 @@ public class Login extends HttpServlet {
 				errors.add("Check your login or password");
 
 			redirect = getServletContext().getContextPath()	+ request.getServletPath();
-			request.getSession().setAttribute(Constants.FORM_ERRORS, errors);
+			request.getSession().setAttribute(Constants.BEAN_ERRORS, errors);
 			request.getSession().setAttribute(Constants.FORM_BEAN, formBean);
 
 			log.debug("redirect to ->" + redirect);

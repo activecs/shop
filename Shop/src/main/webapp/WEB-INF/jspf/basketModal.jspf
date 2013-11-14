@@ -1,0 +1,10 @@
+<div id="activity" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="activity" aria-hidden="false">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+		<h3>What do you wish?</h3>
+	</div>
+	<div class="modal-body">
+		<a href="#" class="btn btn-large pull-left" data-dismiss="modal"><i class="icon-arrow-left"></i> Continue Shopping</a>
+		<a href="<c:url value='/basket' />" class="btn btn-large pull-right">Go to basket <i class="icon-arrow-right"></i></a>
+	</div>
+</div>

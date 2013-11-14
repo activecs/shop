@@ -5,7 +5,7 @@ import java.util.List;
 import ua.epam.dereza.shop.bean.Category;
 import ua.epam.dereza.shop.bean.Manufacturer;
 import ua.epam.dereza.shop.bean.Product;
-import ua.epam.dereza.shop.bean.ProductFilter;
+import ua.epam.dereza.shop.bean.ProductQueryParam;
 import ua.epam.dereza.shop.db.dao.DAOException;
 
 public interface ProductService {

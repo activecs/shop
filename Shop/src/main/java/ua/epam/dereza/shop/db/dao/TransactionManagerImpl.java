@@ -22,8 +22,9 @@ public class TransactionManagerImpl implements TransactionManager {
 			conn = ConnectionManager.getConnection();
 			res = operation.execute(conn);
 			commit(conn);
-		}catch(Exception e){
+		}catch(DAOException e){
 			rollback(conn);
+			throw e;
 		}finally{
 			close(conn);
 		}

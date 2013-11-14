@@ -5,4 +5,12 @@
         <role>admin</role>
         <role>user</role>
     </constraint>
+    <constraint>
+    	<url-pattern>/requisites</url-pattern>
+    	<role>user</role>
+    </constraint>
+    <constraint>
+    	<url-pattern>/successOrder</url-pattern>
+    	<role>user</role>
+    </constraint>
 </tns:security>

@@ -62,6 +62,11 @@ public class UserServiceImpl implements UserService {
 						return AuthState.INCORRECT;
 					}
 				}
+
+				// if evething is ok
+				userDTO.setLastSuccessLogin(new Date());
+				userDTO.setLoginAttemptCount(0);
+				userDAO.updateUser(conn, userDTO);
 				return AuthState.OK;
 			}
 		});
@@ -122,10 +127,6 @@ public class UserServiceImpl implements UserService {
 
 				if(log.isDebugEnabled())
 					log.trace("Found user in db ->" + userDTO);
-
-				userDTO.setLastSuccessLogin(new Date());
-				userDTO.setLoginAttemptCount(0);
-				userDAO.updateUser(conn, userDTO);
 
 				return userDTO;
 			}

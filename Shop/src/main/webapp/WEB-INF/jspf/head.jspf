@@ -3,7 +3,7 @@
 <%-- bundle basename for localization --%>
 <fmt:setBundle basename="messages" var="bundle" scope="request" />
 
-<title>Netshop online Shopping cart</title>
+<title>Netshop</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
@@ -35,3 +35,5 @@
 <script src="<c:url value='/resources/bootstrap/js/bootstrap-datepicker.js'/>" type="text/javascript" ></script>
 <script src="<c:url value='/resources/js/netshop.js'/>" type="text/javascript"></script>
 <script src="<c:url value='/resources/js/registration.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/resources/js/basket.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/resources/js/requisites.js'/>" type="text/javascript"></script>

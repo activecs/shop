@@ -16,6 +16,8 @@ import ua.epam.dereza.shop.service.CaptchaServiceHidden;
 import ua.epam.dereza.shop.service.CaptchaServiceSession;
 import ua.epam.dereza.shop.service.ImageService;
 import ua.epam.dereza.shop.service.ImageServiceImpl;
+import ua.epam.dereza.shop.service.OrderService;
+import ua.epam.dereza.shop.service.OrderServiceImpl;
 import ua.epam.dereza.shop.service.ProductService;
 import ua.epam.dereza.shop.service.ProductServiceImpl;
 import ua.epam.dereza.shop.service.UserService;
@@ -68,6 +70,10 @@ public class ContextListener implements ServletContextListener {
 		// productService
 		ProductService productService  = new ProductServiceImpl(daoFactory);
 		context.setAttribute(Constants.SERVICE_PRODUCT, productService);
+
+		// orderService
+		OrderService orderService = new OrderServiceImpl(daoFactory);
+		context.setAttribute(Constants.SERVICE_ORDER, orderService);
 	}
 
 	/**

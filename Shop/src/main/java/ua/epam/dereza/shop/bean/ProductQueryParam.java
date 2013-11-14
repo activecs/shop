@@ -9,7 +9,7 @@ import java.util.List;
  * @author Eduard_Dereza
  *
  */
-public class ProductFilter {
+public class ProductQueryParam {
 
 	private String sortBy;
 	private List<String> manufacturers;

@@ -4,6 +4,9 @@
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 </head>
 <body>
+	<!-- Modal window -->
+	<%@ include file="/WEB-INF/jspf/basketModal.jspf" %>
+	<!-- Modal window end-->
 	<!-- Header =============================== -->
 	<header>
 		<%@ include file="/WEB-INF/jspf/header.jspf"%>
@@ -147,7 +150,7 @@
 									<h3>$${product.price}</h3>
 									<br /> 
 										
-										<a href="#" class="btn btn-large btn-primary">Add to <i class=" icon-shopping-cart"></i></a> 
+										<shop:buyButton productId="${product.id}" /> 
 									
 									</form>
 								</div>
@@ -168,7 +171,7 @@
 											<h5>${product.manufacturer} ${product.name}</h5>
 											<h4 style="text-align: center">
 												<a class="btn" href="<c:url value='/productDetail?id=${product.id}' />" ><i class="icon-zoom-in"></i></a> 
-												<a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a>
+												<shop:buyButton productId="${product.id}" />
 												<a class="btn btn-primary">$${product.price}</a>
 											</h4>
 										</div>

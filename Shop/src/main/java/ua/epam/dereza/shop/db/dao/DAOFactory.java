@@ -14,4 +14,6 @@ public interface DAOFactory {
 	public ManufacturerDAO getManufacturerDAO();
 
 	public CategoryDAO getCategoryDAO();
+
+	public OrderDAO getOrderDAO();
 }

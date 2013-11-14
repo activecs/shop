@@ -43,7 +43,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import ua.epam.dereza.shop.bean.Product;
-import ua.epam.dereza.shop.bean.ProductFilter;
+import ua.epam.dereza.shop.bean.ProductQueryParam;
 import ua.epam.dereza.shop.core.Constants;
 import ua.epam.dereza.shop.db.dao.ConnectionManager;
 import ua.epam.dereza.shop.db.dao.DAOFactory;
@@ -165,7 +165,7 @@ public class ProductsIntegrationTest {
 
 		}
 		products.doGet(request, response);
-		verify(request).setAttribute(eq(Constants.FORM_BEAN), notNull(ProductFilter.class));
+		verify(request).setAttribute(eq(Constants.FORM_BEAN), notNull(ProductQueryParam.class));
 		verify(request).setAttribute(eq(Constants.BEAN_PRODUCTS), argThat(new ProductsList()));
 	}
 
@@ -188,7 +188,7 @@ public class ProductsIntegrationTest {
 		doReturn("n14").when(request).getParameter(Products.FORM_FIELD_KEYWORD);
 
 		products.doGet(request, response);
-		verify(request).setAttribute(eq(Constants.FORM_BEAN), notNull(ProductFilter.class));
+		verify(request).setAttribute(eq(Constants.FORM_BEAN), notNull(ProductQueryParam.class));
 		verify(request).setAttribute(eq(Constants.BEAN_PRODUCTS), argThat(new ProductsList()));
 	}
 }

@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 import ua.epam.dereza.shop.bean.Category;
 import ua.epam.dereza.shop.bean.Manufacturer;
-import ua.epam.dereza.shop.bean.ProductFilter;
+import ua.epam.dereza.shop.bean.ProductQueryParam;
 import ua.epam.dereza.shop.bean.Product;
 import ua.epam.dereza.shop.core.Constants;
 import ua.epam.dereza.shop.db.dao.DAOException;
@@ -60,7 +60,7 @@ public class Products extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ProductFilter filter = new ProductFilter();
+		ProductQueryParam filter = new ProductQueryParam();
 
 		// parses and validates form
 		parseRequest(request, filter);
@@ -116,7 +116,7 @@ public class Products extends HttpServlet {
 	 * @param formBean
 	 * @return calculated offset
 	 */
-	private Integer calculateOffset(Integer totalProductCount, ProductFilter filter){
+	private Integer calculateOffset(Integer totalProductCount, ProductQueryParam filter){
 		Integer productPerPage = filter.getItemPerPage();
 		Integer page = filter.getPage();
 
@@ -136,7 +136,7 @@ public class Products extends HttpServlet {
 	 * @param req
 	 * @param filter
 	 */
-	private void parseRequest(HttpServletRequest req, ProductFilter filter){
+	private void parseRequest(HttpServletRequest req, ProductQueryParam filter){
 		// category
 		String category = req.getParameter(FORM_FIELD_CATEGORY);
 		if(category != null && category.trim().length() != 0)

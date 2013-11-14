@@ -28,7 +28,7 @@ public class Logout extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User userDTO = (User) request.getSession().getAttribute(Constants.USER_BEAN);
+		User userDTO = (User) request.getSession().getAttribute(Constants.BEAN_USER);
 		request.getSession().invalidate();
 		String redirect = response.encodeRedirectURL(getServletContext().getContextPath());
 		if(log.isEnabledFor(Level.DEBUG))
