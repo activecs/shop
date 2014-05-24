@@ -14,6 +14,7 @@
 
 	<!--file appender configuration -->
 	<appender name="file" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="INFO"/>
 		<param name="File" value="C:\\logs\\Shop.log" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="5" />
