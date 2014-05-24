@@ -73,10 +73,13 @@ public class MysqlUserDAO implements UserDAO {
 
 	@Override
 	public void saveUser(Connection conn, User user) throws DAOException {
-		try (PreparedStatement pstmt = conn.prepareStatement(SQL_CREATE_NEW_USER)){
+		try (PreparedStatement pstmt = conn.prepareStatement(SQL_CREATE_NEW_USER, Statement.RETURN_GENERATED_KEYS)){
 			packUserDTO(pstmt, user);
 			pstmt.setString(14, user.getEmail());
 			pstmt.executeUpdate();
+			ResultSet rs = pstmt.getGeneratedKeys();
+			rs.next();
+			user.setId(rs.getInt(1));
 		} catch (Exception e) {
 			String message = "Cannot perform query";
 			log.error(message, e);

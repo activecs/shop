@@ -21,7 +21,7 @@ import ua.epam.dereza.shop.bean.User;
 import ua.epam.dereza.shop.core.Constants;
 import ua.epam.dereza.shop.db.dao.DAOException;
 import ua.epam.dereza.shop.service.OrderService;
-import ua.epam.dereza.shop.util.BeanValidator;
+import ua.epam.dereza.shop.util.RequisitesValidator;
 
 /**
  * Servlet implementation class Requisites
@@ -69,7 +69,7 @@ public class Requisites extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		RequisitesBean bean = parseRequest(request);
-		List<String> errors = BeanValidator.validate(bean);
+		List<String> errors = new RequisitesValidator().validate(bean);
 		String redirect = null;
 
 		// redirect to /requisites if error's list isn't empty

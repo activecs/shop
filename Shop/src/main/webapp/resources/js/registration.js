@@ -24,7 +24,7 @@ $(window).load(function() {
 	});
 	
 	 // send ajax query
-    $('#registration-form #inputEmail').bind("change keyup", function() {    		
+    $('#registration-form #inputEmail').bind("change keyup blur", function() {    		
     	if(registration.validateEmail($(this).val())){        	
     			ajaxJson.sendRequest();        		
         }

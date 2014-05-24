@@ -28,7 +28,7 @@ import ua.epam.dereza.shop.service.CaptchaService;
 import ua.epam.dereza.shop.service.ImageService;
 import ua.epam.dereza.shop.service.UserService;
 import ua.epam.dereza.shop.util.BeanTransformer;
-import ua.epam.dereza.shop.util.BeanValidator;
+import ua.epam.dereza.shop.util.RegistrationValidator;
 import ua.epam.dereza.shop.util.ImageUtil;
 
 /**
@@ -74,6 +74,7 @@ public class Registration extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		encoding = config.getServletContext().getInitParameter(Constants.ENCODING);
+		externalResources = config.getServletContext().getInitParameter(Constants.EXTERNAL_RESOURCES);
 
 		captchaService = (CaptchaService) config.getServletContext().getAttribute(Constants.CAPTCHA_SERVICE);
 		userService = (UserService)config.getServletContext().getAttribute(Constants.SERVICE_USER);
@@ -123,7 +124,7 @@ public class Registration extends HttpServlet {
 		errors.addAll(captchaService.validateCaptcha(request, formBean));
 
 		// validate formBean
-		errors.addAll(BeanValidator.validate(formBean));
+		errors.addAll(new RegistrationValidator().validate(formBean));
 
 		// saves new client
 		try{
